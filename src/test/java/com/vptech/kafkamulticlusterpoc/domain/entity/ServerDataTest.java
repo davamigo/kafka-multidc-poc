@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 /**
  * Unit test for ServerData entity
+ *
+ * @author david.amigo
  */
 @SpringBootTest
 public class ServerDataTest {

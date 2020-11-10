@@ -1,9 +1,7 @@
 package com.vptech.kafkamulticlusterpoc.domain.service;
 
 import com.vptech.kafkamulticlusterpoc.domain.entity.ServerData;
-import com.vptech.kafkamulticlusterpoc.domain.entity.ServerLocation;
 import com.vptech.kafkamulticlusterpoc.domain.entity.ServerStatus;
-import com.vptech.kafkamulticlusterpoc.domain.entity.ServerType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +11,8 @@ import java.util.Map;
 
 /**
  * Unit test for ServerDataStorage service
+ *
+ * @author david.amigo
  */
 @SpringBootTest
 public class ServerDataStorageTest {

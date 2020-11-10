@@ -8,6 +8,8 @@ import java.util.Collections;
 
 /**
  * Unit test for ZookeeperData entity
+ *
+ * @author david.amigo
  */
 @SpringBootTest
 public class ZookeeperDataTest {

@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
  * @author david.amigo
  */
 @Component
-public class ServerStatusesChecker {
+public class ServerStatusCheckerTask {
 
     /** Logger */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerStatusesChecker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerStatusCheckerTask.class);
 
     /** Storage for the server data */
     private final ServerDataStorage storage;
@@ -33,7 +33,7 @@ public class ServerStatusesChecker {
      * @param checker the service to check the server status
      */
     @Autowired
-    public ServerStatusesChecker(
+    public ServerStatusCheckerTask(
             final ServerDataStorage storage,
             final ServerStatusChecker checker
     ) {
