@@ -25,15 +25,15 @@ public class DockerContainerStatusChecker implements ServerStatusChecker {
     /**
      * Checks and returns the status of a server
      *
-     * @param server the name of the server
+     * @param serverName the name of the server
      * @return UP if the server is UP, DOWN if the server is down, UNKNOWN in case of unable to check
      */
     @Override
-    public ServerStatus check(final String server) {
+    public ServerStatus check(final String serverName) {
         ServerStatus result = ServerStatus.UNKNOWN;
 
         try {
-            String command = String.format("docker ps --filter name=%s --format {{.Names}} ", server);
+            String command = String.format("docker ps --filter name=%s --format {{.Names}} ", serverName);
             LOGGER.debug("Bash command: " + command);
 
             Process process = Runtime.getRuntime().exec(command);

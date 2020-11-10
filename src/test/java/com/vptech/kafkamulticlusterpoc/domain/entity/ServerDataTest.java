@@ -176,4 +176,25 @@ public class ServerDataTest {
 
         Assertions.assertEquals(expected, serverData.getServerData());
     }
+
+    @Test
+    public void testGetExistingFieldRetrievesTheValue() {
+
+        ServerData serverData = new ServerData();
+        serverData.setField("_a_field_", "_some_value_");
+
+        final String expected = "_some_value_";
+
+        Assertions.assertEquals(expected, serverData.getField("_a_field_", "_default_"));
+    }
+
+    @Test
+    public void testGetNonExistingFieldRetrievesTheDefaultValue() {
+
+        ServerData serverData = new ServerData();
+
+        final String expected = "_default_";
+
+        Assertions.assertEquals(expected, serverData.getField("_unknown_", "_default_"));
+    }
 }
