@@ -1,0 +1,34 @@
+version: "3.5"
+services:
+
+  kpoc_zookeeper1:
+    ports:
+      - "2181:2181"
+
+  kpoc_zookeeper2:
+    ports:
+      - "2182:2181"
+
+  kpoc_zookeeper3:
+    ports:
+      - "2183:2181"
+
+  kpoc_broker1:
+    ports:
+      - "9092:9092"
+
+  kpoc_broker2:
+    ports:
+      - "9093:9092"
+
+  kpoc_broker3:
+    ports:
+      - "9094:9092"
+
+  kpoc_broker4:
+    ports:
+      - "9095:9092"
+
+  kpoc_broker5:
+    ports:
+      - "9096:9092"

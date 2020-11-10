@@ -1,0 +1,187 @@
+version: "3.5"
+services:
+
+  kpoc_zookeeper1:
+    build:
+      context: .
+    image: "blacktop/kafka:2.6-z"
+    restart: "always"
+    container_name: "kpoc_zookeeper1"
+    command: "zookeeper-server-start.sh config/zookeeper.properties"
+    networks:
+      - "kpoc_network"
+    environment:
+      - "ZOOKEEPER_MYID=1"
+      - "ZOOKEEPER_SERVER_1=kpoc_zookeeper1:2888:3888"
+      - "ZOOKEEPER_SERVER_2=kpoc_zookeeper2:2888:3888"
+      - "ZOOKEEPER_SERVER_3=kpoc_zookeeper3:2888:3888"
+
+  kpoc_zookeeper2:
+    build:
+      context: .
+    image: "blacktop/kafka:2.6-z"
+    restart: "always"
+    container_name: "kpoc_zookeeper2"
+    command: "zookeeper-server-start.sh config/zookeeper.properties"
+    networks:
+      - "kpoc_network"
+    environment:
+      - "ZOOKEEPER_MYID=2"
+      - "ZOOKEEPER_SERVER_1=kpoc_zookeeper1:2888:3888"
+      - "ZOOKEEPER_SERVER_2=kpoc_zookeeper2:2888:3888"
+      - "ZOOKEEPER_SERVER_3=kpoc_zookeeper3:2888:3888"
+
+  kpoc_zookeeper3:
+    build:
+      context: .
+    image: "blacktop/kafka:2.6-z"
+    restart: "always"
+    container_name: "kpoc_zookeeper3"
+    command: "zookeeper-server-start.sh config/zookeeper.properties"
+    networks:
+      - "kpoc_network"
+    environment:
+      - "ZOOKEEPER_MYID=3"
+      - "ZOOKEEPER_SERVER_1=kpoc_zookeeper1:2888:3888"
+      - "ZOOKEEPER_SERVER_2=kpoc_zookeeper2:2888:3888"
+      - "ZOOKEEPER_SERVER_3=kpoc_zookeeper3:2888:3888"
+
+  kpoc_broker1:
+    image: "blacktop/kafka:2.6"
+    restart: "unless-stopped"
+    container_name: "kpoc_broker1"
+    links:
+      - "kpoc_zookeeper1"
+      - "kpoc_zookeeper2"
+      - "kpoc_zookeeper3"
+    external_links:
+      - "kpoc_broker2"
+      - "kpoc_broker3"
+      - "kpoc_broker4"
+      - "kpoc_broker5"
+    networks:
+      - "kpoc_network"
+    entrypoint: "/wait-for-it.sh kpoc_zookeeper1:2181 -s --timeout=5 -- /kafka-entrypoint.sh"
+    command: "kafka-server-start.sh config/server.properties"
+    environment:
+      - "KAFKA_BROKER_ID=1"
+      - "KAFKA_BROKER_RACK=dc1"
+      - "KAFKA_NUM_PARTITIONS=7"
+      - "KAFKA_MIN_INSYNC_REPLICAS=2"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker1"
+      - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
+      - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
+
+  kpoc_broker2:
+    image: "blacktop/kafka:2.6"
+    restart: "unless-stopped"
+    container_name: "kpoc_broker2"
+    links:
+      - "kpoc_zookeeper1"
+      - "kpoc_zookeeper2"
+      - "kpoc_zookeeper3"
+    external_links:
+      - "kpoc_broker1"
+      - "kpoc_broker3"
+      - "kpoc_broker4"
+      - "kpoc_broker5"
+    networks:
+      - "kpoc_network"
+    entrypoint: "/wait-for-it.sh kpoc_zookeeper2:2181 -s --timeout=5 -- /kafka-entrypoint.sh"
+    command: "kafka-server-start.sh config/server.properties"
+    environment:
+      - "KAFKA_BROKER_ID=2"
+      - "KAFKA_BROKER_RACK=dc2"
+      - "KAFKA_NUM_PARTITIONS=7"
+      - "KAFKA_MIN_INSYNC_REPLICAS=2"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker2"
+      - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
+      - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
+
+  kpoc_broker3:
+    image: "blacktop/kafka:2.6"
+    restart: "unless-stopped"
+    container_name: "kpoc_broker3"
+    links:
+      - "kpoc_zookeeper1"
+      - "kpoc_zookeeper2"
+      - "kpoc_zookeeper3"
+    external_links:
+      - "kpoc_broker1"
+      - "kpoc_broker2"
+      - "kpoc_broker4"
+      - "kpoc_broker5"
+    networks:
+      - "kpoc_network"
+    entrypoint: "/wait-for-it.sh kpoc_zookeeper1:2181 -s --timeout=5 -- /kafka-entrypoint.sh"
+    command: "kafka-server-start.sh config/server.properties"
+    environment:
+      - "KAFKA_BROKER_ID=3"
+      - "KAFKA_BROKER_RACK=dc1"
+      - "KAFKA_NUM_PARTITIONS=7"
+      - "KAFKA_MIN_INSYNC_REPLICAS=2"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker3"
+      - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
+      - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
+
+  kpoc_broker4:
+    image: "blacktop/kafka:2.6"
+    restart: "unless-stopped"
+    container_name: "kpoc_broker4"
+    links:
+      - "kpoc_zookeeper1"
+      - "kpoc_zookeeper2"
+      - "kpoc_zookeeper3"
+    external_links:
+      - "kpoc_broker1"
+      - "kpoc_broker2"
+      - "kpoc_broker3"
+      - "kpoc_broker5"
+    networks:
+      - "kpoc_network"
+    entrypoint: "/wait-for-it.sh kpoc_zookeeper2:2181 -s --timeout=5 -- /kafka-entrypoint.sh"
+    command: "kafka-server-start.sh config/server.properties"
+    environment:
+      - "KAFKA_BROKER_ID=4"
+      - "KAFKA_BROKER_RACK=dc2"
+      - "KAFKA_NUM_PARTITIONS=7"
+      - "KAFKA_MIN_INSYNC_REPLICAS=2"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker4"
+      - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
+      - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
+
+  kpoc_broker5:
+    image: "blacktop/kafka:2.6"
+    restart: "unless-stopped"
+    container_name: "kpoc_broker5"
+    links:
+      - "kpoc_zookeeper1"
+      - "kpoc_zookeeper2"
+      - "kpoc_zookeeper3"
+    external_links:
+      - "kpoc_broker1"
+      - "kpoc_broker2"
+      - "kpoc_broker3"
+      - "kpoc_broker4"
+    networks:
+      - "kpoc_network"
+    entrypoint: "/wait-for-it.sh kpoc_zookeeper1:2181 -s --timeout=5 -- /kafka-entrypoint.sh"
+    command: "kafka-server-start.sh config/server.properties"
+    environment:
+      - "KAFKA_BROKER_ID=5"
+      - "KAFKA_BROKER_RACK=dc1"
+      - "KAFKA_NUM_PARTITIONS=7"
+      - "KAFKA_MIN_INSYNC_REPLICAS=2"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker5"
+      - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
+      - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
+
+networks:
+  kpoc_network:
+    driver: "bridge"
+    name: "kpoc_network"

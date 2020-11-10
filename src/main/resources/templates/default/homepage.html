@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Homepage - Kafka Multicluster PoC</title>
+</head>
+<body>
+<h1>Kafka Multicluster PoC</h1>
+<h2>Homepage</h2>
+<h3>Server statuses</h3>
+<ul>
+    <li th:each="server : ${servers}">
+        <span th:text="${server.key}"></span>
+        =
+        <span th:text="${server.value}"></span>
+    </li>
+</ul>
+</body>
+</html>
