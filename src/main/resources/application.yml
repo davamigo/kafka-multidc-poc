@@ -8,16 +8,19 @@ logging:
       vptech:
         kafkamulticlusterpoc:
           infrastructure:
-            service: info;
+            scheduler: debug;
 
 app:
   config:
-    task:
-      CheckServerStatusTask:
-        cron: "*/5 * * * * *"
+    scheduler:
+      threads: 5
 
-      ServerDataExtraDataReaderTask:
-        cron: "* */1 * * * *"
+      task:
+        CheckServerStatusTask:
+          cron: "*/30 * * * * *"
+
+        ServerDataExtraDataReaderTask:
+          cron: "*/120 * * * * *"
 
     server:
       names: >

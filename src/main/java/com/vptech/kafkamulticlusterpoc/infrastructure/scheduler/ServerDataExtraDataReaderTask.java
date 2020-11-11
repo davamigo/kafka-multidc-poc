@@ -46,13 +46,13 @@ public class ServerDataExtraDataReaderTask {
     /**
      * Scheduled task get extra data from the servers
      */
-    @Scheduled(cron = "${app.config.task.ServerDataExtraDataReaderTask.cron:-}")
+    @Scheduled(cron = "${app.config.scheduler.task.ServerDataExtraDataReaderTask.cron:-}")
     public void checkServerStatusTask() {
 
         LOGGER.debug("ServerDataExtraDataReaderTask - starting task...");
         for (String serverName : storage.getServerNames()) {
 
-            LOGGER.debug("ServerDataExtraDataReaderTask - Reading extra data from " + serverName + "...");
+            LOGGER.debug("ServerDataExtraDataReaderTask - reading extra data from " + serverName + "...");
             ServerData server = storage.getServer(serverName);
 
             for (ServerExtraDataReader reader : readers) {

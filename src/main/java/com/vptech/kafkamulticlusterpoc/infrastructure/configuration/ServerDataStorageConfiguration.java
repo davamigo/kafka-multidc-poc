@@ -12,7 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
- * Creates the ServerDataStorage bean reading the config of the servers from the environment
+ * Configuration class to create the ServerDataStorage bean
+ *
+ * @author david.amigo
  */
 @Configuration
 public class ServerDataStorageConfiguration {

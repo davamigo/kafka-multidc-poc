@@ -1,0 +1,11 @@
+app:
+  config:
+    scheduler:
+      threads: 1
+
+      task:
+        CheckServerStatusTask:
+          cron: "-"
+
+        ServerDataExtraDataReaderTask:
+          cron: "-"

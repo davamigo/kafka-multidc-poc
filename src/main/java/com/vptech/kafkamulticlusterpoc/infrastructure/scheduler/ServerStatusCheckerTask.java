@@ -44,7 +44,7 @@ public class ServerStatusCheckerTask {
     /**
      * Scheduled task to check the server status periodically
      */
-    @Scheduled(cron = "${app.config.task.CheckServerStatusTask.cron:-}")
+    @Scheduled(cron = "${app.config.scheduler.task.CheckServerStatusTask.cron:-}")
     public void checkServerStatusTask() {
 
         LOGGER.debug("CheckServerStatusTask - starting task...");

@@ -160,7 +160,7 @@ public class ServerData {
      * @param field the name of the field
      * @param value the value
      */
-    void setField(final String field, final String value) {
+    synchronized void setField(final String field, final String value) {
         this.properties.put(field, value);
     }
 
@@ -169,7 +169,7 @@ public class ServerData {
      * @param defaultValue the defualt value
      * @return the value of a field
      */
-    String getField(final String field, final String defaultValue) {
+    synchronized String getField(final String field, final String defaultValue) {
         if (!this.properties.containsKey(field)) {
             return defaultValue;
         }
