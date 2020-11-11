@@ -6,7 +6,9 @@ logging:
   level:
     com:
       vptech:
-        kafkamulticlusterpoc: info;
+        kafkamulticlusterpoc:
+          infrastructure:
+            service: info;
 
 app:
   config:

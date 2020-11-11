@@ -55,11 +55,9 @@ public class ServerDataExtraDataReaderTask {
             LOGGER.debug("ServerDataExtraDataReaderTask - Reading extra data from " + serverName + "...");
             ServerData server = storage.getServer(serverName);
 
-            if (server.getStatus() == ServerStatus.UP) {
-                for (ServerExtraDataReader reader : readers) {
-                    if (reader.isEligible(server)) {
-                        reader.readExtraData(server);
-                    }
+            for (ServerExtraDataReader reader : readers) {
+                if (reader.isEligible(server)) {
+                    reader.readExtraData(server);
                 }
             }
         }

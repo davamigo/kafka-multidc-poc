@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Service to read some extra data from a zookeeper server
+ * Service to read the ID in the quorum  of the zookeeper server
  *
  * @author david.amigo
  */
@@ -41,6 +41,7 @@ public class ZookeeperIdReader implements ServerExtraDataReader {
     public boolean isEligible(final ServerData server) {
         return (server.getLocation() == ServerLocation.DOCKER
                 && server.getType() == ServerType.ZOOKEEPER
+                && server.getStatus() == ServerStatus.UP
                 && server instanceof ZookeeperData);
     }
 
@@ -69,9 +70,8 @@ public class ZookeeperIdReader implements ServerExtraDataReader {
                 zookeeperData.setZookeeperId(zookeeperId);
             }
         } catch (NumberFormatException exc) {
+            LOGGER.error("ZookeeperIdReader - exception: " + exc.getMessage());
             exc.printStackTrace();
-            LOGGER.debug("ZookeeperIdReader - exception: " + exc.getMessage());
         }
-
     }
 }

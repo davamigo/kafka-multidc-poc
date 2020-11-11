@@ -1,6 +1,5 @@
 package com.vptech.kafkamulticlusterpoc.infrastructure.service;
 
-import com.vptech.kafkamulticlusterpoc.domain.entity.ServerStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,15 +38,15 @@ public class BashCommandRunner {
             String output;
             if (0 == exitCode) {
                 output = readStream(process.getInputStream());
-                LOGGER.debug("BashCommandRunner - output: " + (output.isEmpty() ? "<empty>" : output));
+                LOGGER.debug("BashCommandRunner - output: " + (output.isEmpty() ? "<empty>" : output.replace("\n", "\\n")));
             } else {
                 output = readStream(process.getErrorStream());
-                LOGGER.debug("BashCommandRunner - error: " + output);
+                LOGGER.error("BashCommandRunner - error: " + output.replace("\n", "\\n"));
             }
             return output;
 
         } catch (IOException | InterruptedException exc) {
-            LOGGER.debug("BashCommandRunner - exception: " + exc.getMessage());
+            LOGGER.error("BashCommandRunner - exception: " + exc.getMessage());
             exc.printStackTrace();
             return exc.getMessage();
         }
@@ -69,6 +68,9 @@ public class BashCommandRunner {
         try {
             String line;
             while ((line = reader.readLine()) != null) {
+                if (result.length() > 1) {
+                    result.append("\n");
+                }
                 result.append(line);
             }
         } catch (IOException exc) {
