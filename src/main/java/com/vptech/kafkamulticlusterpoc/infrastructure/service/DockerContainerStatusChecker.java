@@ -4,12 +4,8 @@ import com.vptech.kafkamulticlusterpoc.domain.entity.ServerStatus;
 import com.vptech.kafkamulticlusterpoc.domain.service.ServerStatusChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * Service to check the status of a container running in docker
@@ -22,6 +18,19 @@ public class DockerContainerStatusChecker implements ServerStatusChecker {
     /** Logger */
     private static final Logger LOGGER = LoggerFactory.getLogger(DockerContainerStatusChecker.class);
 
+    /** Service to run a bash command */
+    private final BashCommandRunner runner;
+
+    /**
+     * Autowired constructor
+     *
+     * @param runner the service to run bash commands
+     */
+    @Autowired
+    public DockerContainerStatusChecker(BashCommandRunner runner) {
+        this.runner = runner;
+    }
+
     /**
      * Checks and returns the status of a server
      *
@@ -30,53 +39,20 @@ public class DockerContainerStatusChecker implements ServerStatusChecker {
      */
     @Override
     public ServerStatus check(final String serverName) {
-        ServerStatus result = ServerStatus.UNKNOWN;
 
-        try {
-            String command = String.format("docker ps --filter name=%s --format {{.Names}} ", serverName);
-            LOGGER.debug("Bash command: " + command);
+        LOGGER.debug("DockerContainerStatusChecker - checking the status of " + serverName + "...");
 
-            Process process = Runtime.getRuntime().exec(command);
-            int exitCode = process.waitFor();
-            LOGGER.debug("Bash command exit code: " + exitCode);
+        String command = String.format("docker ps --filter name=%s --format {{.Names}} ", serverName);
+        String output = runner.runCommand(command);
 
-            if (0 == exitCode) {
-                String output = readStream(process.getInputStream());
-                LOGGER.debug("Bash command output: " + (output.isEmpty() ? "<empty>" : output));
-                result = (output.isEmpty()) ? ServerStatus.DOWN : ServerStatus.UP;
-            } else {
-                String output = readStream(process.getErrorStream());
-                LOGGER.debug("Bash command error: " + output);
-            }
-        } catch (IOException | InterruptedException exc) {
-            exc.printStackTrace();
-        }
+        ServerStatus result = (output.isEmpty())
+                ? ServerStatus.DOWN
+                : (output.equals(serverName))
+                        ? ServerStatus.UP
+                        : ServerStatus.UNKNOWN;
+
+        LOGGER.debug("DockerContainerStatusChecker - the status of " + serverName + " is " + result.toString());
+
         return result;
-    }
-
-    /**
-     * Reads an input stream
-     *
-     * @param stream the input stream
-     * @return the read lines
-     */
-    private String readStream(InputStream stream) {
-
-        StringBuilder result = new StringBuilder();
-
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(stream)
-        );
-
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                result.append(line);
-            }
-        } catch (IOException exc) {
-            exc.printStackTrace();
-        }
-
-        return result.toString();
     }
 }

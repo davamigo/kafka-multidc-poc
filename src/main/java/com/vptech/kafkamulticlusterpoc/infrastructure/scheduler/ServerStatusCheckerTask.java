@@ -42,16 +42,20 @@ public class ServerStatusCheckerTask {
     }
 
     /**
-     * Scheduled task to check the server status every 5 seconds
+     * Scheduled task to check the server status periodically
      */
-    @Scheduled(cron = "${app.config.task.CheckServerStatuses.cron:-}")
-    public void checkServerStatuses() {
-        LOGGER.debug("Checking the server statuses...");
-        for (String server : storage.getServerNames()) {
-            LOGGER.debug("Checking server " + server + " status...");
-            ServerStatus status = checker.check(server);
-            LOGGER.debug("The status of server " + server + " is " + status);
-            storage.setStatus(server, status);
+    @Scheduled(cron = "${app.config.task.CheckServerStatusTask.cron:-}")
+    public void checkServerStatusTask() {
+
+        LOGGER.debug("CheckServerStatusTask - starting task...");
+        for (String serverName : storage.getServerNames()) {
+
+            LOGGER.debug("CheckServerStatusTask - checking server status of " + serverName + "...");
+            ServerStatus status = checker.check(serverName);
+
+            LOGGER.debug("CheckServerStatusTask - the status of server " + serverName + " is " + status.toString());
+            storage.setStatus(serverName, status);
         }
+        LOGGER.debug("CheckServerStatusTask - task finished.");
     }
 }

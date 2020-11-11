@@ -36,7 +36,7 @@ public class ServerDataStorage {
      * @param server the name of the server
      */
     public void addServer(final ServerData server) {
-        servers.put(server.getName(), (new ServerData()).setServerData(server.getServerData()));
+        servers.put(server.getName(), server);
     }
 
     /**

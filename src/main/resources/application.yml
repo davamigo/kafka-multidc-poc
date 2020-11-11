@@ -11,8 +11,11 @@ logging:
 app:
   config:
     task:
-      CheckServerStatuses:
+      CheckServerStatusTask:
         cron: "*/5 * * * * *"
+
+      ServerDataExtraDataReaderTask:
+        cron: "* */1 * * * *"
 
     server:
       names: >
