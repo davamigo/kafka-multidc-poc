@@ -61,7 +61,7 @@ public class ServerDataStorage {
     }
 
     /**
-     * @return a copy of the map of statusMap
+     * @return a copy of the map of servers
      */
     public Map<String, ServerData> getServers() {
         return new TreeMap<>(servers);
@@ -89,7 +89,7 @@ public class ServerDataStorage {
     }
 
     /**
-     * @return a map with all the statusMap and statuses
+     * @return a map with all the servers and statuses
      */
     public Map<String, ServerStatus> getStatusMap() {
         return new TreeMap<>(servers
