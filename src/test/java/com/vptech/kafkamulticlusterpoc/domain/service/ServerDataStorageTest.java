@@ -54,6 +54,25 @@ public class ServerDataStorageTest {
     }
 
     @Test
+    public void testGetServersWithEmptyStorageReturnsEmptyMap() {
+
+        ServerDataStorage storage = new ServerDataStorage();
+        storage.clearStorage();
+
+        Assertions.assertTrue(storage.getServers().isEmpty());
+    }
+
+    @Test
+    public void testGetServersWithNonEmptyStorageReturnsNonEmptyMap() {
+
+        ServerDataStorage storage = new ServerDataStorage();
+        storage.clearStorage();
+        storage.addServer((new ServerData()).setName("xxx"));
+
+        Assertions.assertFalse(storage.getServers().isEmpty());
+    }
+
+    @Test
     public void testSetStatusOfNonExistingServerReturnsNull() {
 
         ServerDataStorage storage = new ServerDataStorage();
@@ -125,18 +144,18 @@ public class ServerDataStorageTest {
     }
 
     @Test
-    public void testGetAllStatusesWithEmptyStorageReturnsAnEmptyMsp() {
+    public void testGetStatusMapWithEmptyStorageReturnsAnEmptyMsp() {
 
         ServerDataStorage storage = new ServerDataStorage();
         storage.clearStorage();
 
-        Map<String, ServerStatus> result = storage.getAllStatuses();
+        Map<String, ServerStatus> result = storage.getStatusMap();
 
         Assertions.assertTrue(result.isEmpty());
     }
 
     @Test
-    public void testGetAllStatusesWithNonEmptyStorageReturnsMapOfStatus() {
+    public void testGetStatusMapWithNonEmptyStorageReturnsMapOfStatus() {
 
         ServerDataStorage storage = new ServerDataStorage();
         storage.clearStorage();
@@ -144,7 +163,7 @@ public class ServerDataStorageTest {
         storage.addServer("902");
         storage.addServer("903");
 
-        Map<String, ServerStatus> result = storage.getAllStatuses();
+        Map<String, ServerStatus> result = storage.getStatusMap();
 
         Assertions.assertEquals(3, result.size());
     }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -60,6 +61,13 @@ public class ServerDataStorage {
     }
 
     /**
+     * @return a copy of the map of statusMap
+     */
+    public Map<String, ServerData> getServers() {
+        return new TreeMap<>(servers);
+    }
+
+    /**
      * Return all the stored data of a server
      *
      * @param serverName the name of the server
@@ -81,16 +89,16 @@ public class ServerDataStorage {
     }
 
     /**
-     * @return a map with all the servers and statuses
+     * @return a map with all the statusMap and statuses
      */
-    public Map<String, ServerStatus> getAllStatuses() {
-        return servers
+    public Map<String, ServerStatus> getStatusMap() {
+        return new TreeMap<>(servers
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         entry -> entry.getValue().getStatus()
-                ));
+                )));
     }
 
     /**

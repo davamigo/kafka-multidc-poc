@@ -64,4 +64,81 @@ public class ZookeeperDataTest {
 
         Assertions.assertTrue(zookeeperData.getServerData().containsKey("zookeeper.id"));
     }
+
+    @Test
+    public void testBrokerIdsIsEmptyByDefault() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+
+        Assertions.assertEquals("[]", zookeeperData.getBrokerIds());
+    }
+
+    @Test
+    public void testSetBrokerIdsChangesTheBrokerIds() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setBrokerIds("[1, 2]");
+
+        Assertions.assertEquals("[1, 2]", zookeeperData.getBrokerIds());
+    }
+
+    @Test
+    public void testSetServerDataChangesTheBrokerIds() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setServerData(Collections.singletonMap("broker.ids", "[2, 4]"));
+
+        Assertions.assertEquals("[2, 4]", zookeeperData.getBrokerIds());
+    }
+
+    @Test
+    public void testGetServerDataRetrievesTheBrokerIds() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+
+        Assertions.assertTrue(zookeeperData.getServerData().containsKey("broker.ids"));
+    }
+
+    @Test
+    public void testBrokerDataReturnDefaultValue() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+
+        Assertions.assertEquals("{}", zookeeperData.getBrokerData(3));
+    }
+
+    @Test
+    public void testSetBrokerDataChangesTheBrokerData() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setBrokerData(2, "{ \"bar\": \"baz\" }");
+
+        Assertions.assertEquals("{ \"bar\": \"baz\" }", zookeeperData.getBrokerData(2));
+    }
+
+    @Test
+    public void testSetServerDataChangesTheBrokerData() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setServerData(Collections.singletonMap("broker.data.5", "{ \"foo\": \"bar\" }"));
+
+        Assertions.assertEquals("{ \"foo\": \"bar\" }", zookeeperData.getBrokerData(5));
+    }
+
+    @Test
+    public void testGetServerDataDoesntRetrieveTheBrokerDataByDefault() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+
+        Assertions.assertFalse(zookeeperData.getServerData().containsKey("broker.data.1"));
+    }
+
+    @Test
+    public void testGetServerDataRetrievesTheBrokerDataWhenSet() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setBrokerData(9, "{ \"baz\": \"foo\" }");
+
+        Assertions.assertTrue(zookeeperData.getServerData().containsKey("broker.data.9"));
+    }
 }
