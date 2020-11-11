@@ -1,5 +1,6 @@
 package com.vptech.kafkamulticlusterpoc.controller;
 
+import com.vptech.kafkamulticlusterpoc.domain.entity.ServerData;
 import com.vptech.kafkamulticlusterpoc.domain.entity.ServerStatus;
 import com.vptech.kafkamulticlusterpoc.domain.service.ServerDataStorage;
 import org.slf4j.Logger;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Default controller
@@ -55,9 +55,11 @@ public class DefaultController {
     public ModelAndView homepage() {
         LOGGER.debug("DefaultController.homepage");
 
-        Map<String, ServerStatus> servers = new TreeMap<>(storage.getAllStatuses());
+        Map<String, ServerStatus> statusMap = storage.getStatusMap();
+        Map<String, ServerData> servers = storage.getServers();
 
         final ModelAndView mav = new ModelAndView("default/homepage");
+        mav.addObject("statusMap", statusMap);
         mav.addObject("servers", servers);
         return mav;
     }

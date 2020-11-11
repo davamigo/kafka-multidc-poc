@@ -9,10 +9,23 @@
 <h2>Homepage</h2>
 <h3>Server statuses</h3>
 <ul>
-    <li th:each="server : ${servers}">
-        <span th:text="${server.key}"></span>
+    <li th:each="statusItem : ${statusMap}">
+        <span th:text="${statusItem.key}"></span>
         =
-        <span th:text="${server.value}"></span>
+        <span th:text="${statusItem.value}"></span>
+    </li>
+</ul>
+<h3>Server data</h3>
+<ul>
+    <li th:each="serverItem : ${servers}">
+        <span th:text="${serverItem.key}"></span>
+        <ul>
+            <li th:each="seerverData : ${serverItem.value.serverData}">
+                <span th:text="${seerverData.key}"></span>
+                =
+                <span th:text="${seerverData.value}"></span>
+            </li>
+        </ul>
     </li>
 </ul>
 </body>
