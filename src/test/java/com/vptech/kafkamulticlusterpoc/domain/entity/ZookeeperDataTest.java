@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Unit test for ZookeeperData entity
@@ -140,5 +142,85 @@ public class ZookeeperDataTest {
         zookeeperData.setBrokerData(9, "{ \"baz\": \"foo\" }");
 
         Assertions.assertTrue(zookeeperData.getServerData().containsKey("broker.data.9"));
+    }
+
+    @Test
+    public void testGetBrokerIdsListWithNonEmptyJsonArrayReturnsNonEmptyList() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setBrokerIds("[3, 5, 11]");
+
+        List<Integer> expected = Arrays.asList(3, 5, 11);
+
+        Assertions.assertEquals(expected, zookeeperData.getBrokerIdsList());
+    }
+
+    @Test
+    public void testGetBrokerIdsListWithEmptyJsonArrayReturnsAnEmptyList() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setBrokerIds("[]");
+
+        Assertions.assertTrue(zookeeperData.getBrokerIdsList().isEmpty());
+    }
+
+    @Test
+    public void testGetBrokerIdsListWithEmptyObjectReturnsAnEmptyList() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+
+        Assertions.assertTrue(zookeeperData.getBrokerIdsList().isEmpty());
+    }
+
+    @Test
+    public void testGetBrokerIdsListInvalidDataReturnsAnEmptyList() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setBrokerIds("_invalid_");
+
+        Assertions.assertTrue(zookeeperData.getBrokerIdsList().isEmpty());
+    }
+
+    @Test
+    public void testStaticGetBrokerIdsListWithNonEmptyJsonArrayReturnsTheList() {
+
+        String source = "[1, 45, 278]";
+        List<Integer> expected = Arrays.asList(1, 45, 278);
+
+        Assertions.assertEquals(expected, ZookeeperData.getBrokerIdsList(source));
+    }
+
+    @Test
+    public void testStaticGetBrokerIdsListWithEmptyJsonArrayReturnsAnEmptyList() {
+
+        Assertions.assertTrue(ZookeeperData.getBrokerIdsList("[]").isEmpty());
+    }
+
+    @Test
+    public void testStaticGetBrokerIdsListWithEmptyStringReturnsAnEmptyList() {
+
+        Assertions.assertTrue(ZookeeperData.getBrokerIdsList("").isEmpty());
+    }
+
+    @Test
+    public void testStaticGetBrokerIdsListWithInvalidStringReturnsAnEmptyList() {
+
+        Assertions.assertTrue(ZookeeperData.getBrokerIdsList("_inv_").isEmpty());
+    }
+
+    @Test
+    public void testSetStatusDownClearsExtraFields() {
+
+        ZookeeperData zookeeperData = new ZookeeperData();
+        zookeeperData.setZookeeperId(101);
+        zookeeperData.setBrokerIds("[2, 8]");
+        zookeeperData.setBrokerData(2, "110");
+        zookeeperData.setBrokerData(8, "111");
+        zookeeperData.setStatus(ServerStatus.DOWN);
+
+        Assertions.assertEquals(0, zookeeperData.getZookeeperId());
+        Assertions.assertEquals("[]", zookeeperData.getBrokerIds());
+        Assertions.assertEquals("{}}", zookeeperData.getBrokerData(2));
+        Assertions.assertEquals("{}}", zookeeperData.getBrokerData(8));
     }
 }

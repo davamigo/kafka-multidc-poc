@@ -199,4 +199,16 @@ public class ServerDataTest {
 
         Assertions.assertEquals(expected, serverData.getField("_unknown_", "_default_"));
     }
+
+    @Test
+    public void testRemoveFieldAfterSettingItRemovesTheField() {
+
+        ServerData serverData = new ServerData();
+
+        serverData.setField("_field1_", "_val1_");
+        Assertions.assertEquals("_val1_", serverData.getField("_field1_", null));
+
+        serverData.removeField("_field1_");
+        Assertions.assertNull(serverData.getField("_field1_", null));
+    }
 }

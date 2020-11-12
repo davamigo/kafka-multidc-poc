@@ -1,16 +1,16 @@
 package com.vptech.kafkamulticlusterpoc.infrastructure.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vptech.kafkamulticlusterpoc.domain.entity.*;
+import com.vptech.kafkamulticlusterpoc.domain.entity.ServerData;
+import com.vptech.kafkamulticlusterpoc.domain.entity.ServerLocation;
+import com.vptech.kafkamulticlusterpoc.domain.entity.ServerStatus;
+import com.vptech.kafkamulticlusterpoc.domain.entity.ServerType;
+import com.vptech.kafkamulticlusterpoc.domain.entity.ZookeeperData;
 import com.vptech.kafkamulticlusterpoc.domain.service.ServerExtraDataReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -65,39 +65,33 @@ public class ZookeeperBrokersReader implements ServerExtraDataReader {
 
         ZookeeperData zookeeperData = ((ZookeeperData) server);
 
-        LOGGER.debug("ZookeeperBrokersReader - reading broker ids from " + server.getName() + "...");
-        String brokerIds = readBrokerIds(server);
-        if (brokerIds.isEmpty()) {
-            return;
-        }
+        // Skip if broker ids already have read...
+        if (zookeeperData.getBrokerIds().equals("[]")) {
 
-        LOGGER.debug("ZookeeperBrokersReader - The brokers ids are: " + brokerIds);
-        zookeeperData.setBrokerIds(brokerIds);
-
-        Integer[] brokerIdsArray = null;
-        try {
-            brokerIdsArray = new ObjectMapper().readValue(brokerIds, Integer[].class);
-        } catch (JsonProcessingException exc) {
-            LOGGER.error("ZookeeperBrokersReader - exception: " + exc.getMessage());
-            exc.printStackTrace();
-            return;
-        }
-
-        for (int brokerId : brokerIdsArray) {
-
-            // Skip if broker data already exists
-            if (!zookeeperData.getBrokerData(brokerId).equals("{}")) {
-                break;
-            }
-
-            LOGGER.debug("ZookeeperBrokersReader - reading broker " + brokerId + " data from " + server.getName() + "...");
-            String brokerData = readBrokerData(server, brokerId);
-            if (brokerData.isEmpty()) {
+            LOGGER.debug("ZookeeperBrokersReader - reading broker ids from " + server.getName() + "...");
+            String brokerIds = readBrokerIds(server);
+            if (brokerIds.isEmpty()) {
                 return;
             }
 
-            LOGGER.debug("ZookeeperBrokersReader - The data read for broker " + brokerId + " is: " + brokerData);
-            zookeeperData.setBrokerData(brokerId, brokerData);
+            LOGGER.debug("ZookeeperBrokersReader - The brokers ids are: " + brokerIds);
+            zookeeperData.setBrokerIds(brokerIds);
+        }
+
+        for (int brokerId : zookeeperData.getBrokerIdsList()) {
+
+            // Skip if broker data already exists...
+            if (zookeeperData.getBrokerData(brokerId).equals("{}")) {
+
+                LOGGER.debug("ZookeeperBrokersReader - reading broker " + brokerId + " data from " + server.getName() + "...");
+                String brokerData = readBrokerData(server, brokerId);
+                if (brokerData.isEmpty()) {
+                    return;
+                }
+
+                LOGGER.debug("ZookeeperBrokersReader - The data read for broker " + brokerId + " is: " + brokerData);
+                zookeeperData.setBrokerData(brokerId, brokerData);
+            }
         }
     }
 

@@ -1,5 +1,12 @@
 package com.vptech.kafkamulticlusterpoc.domain.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Entity for managing the data of a Zookeeper server
  *
@@ -31,6 +38,28 @@ public class ZookeeperData extends ServerData {
     @Override
     public ServerData setType(ServerType type) {
         return super.setType(ServerType.ZOOKEEPER);
+    }
+
+    /**
+     * Sets the status of the Zookeeper server.
+     *
+     * If the status is DOWN, the extra data is removed.
+     *
+     * @param status the status of the server: UP, DOWN, UNKNOWN
+     * @return this
+     */
+    @Override
+    public ServerData setStatus(ServerStatus status) {
+        super.setStatus(status);
+        if (status == ServerStatus.DOWN) {
+            List<Integer> brokerIds = getBrokerIdsList();
+            for (int brokerId : brokerIds) {
+                removeField(FIELD_BROKER_DATA + brokerId);
+            }
+            this.setZookeeperId(0);
+            this.setBrokerIds("[]");
+        }
+        return this;
     }
 
     /**
@@ -86,6 +115,39 @@ public class ZookeeperData extends ServerData {
      */
     public String getBrokerIds() {
         return getField(FIELD_BROKER_IDS, "[]");
+    }
+
+    /**
+     * Returns the broker ids property converted to a list of ints.
+     *
+     * @return the ids of the brokers connected in list format
+     */
+    public List<Integer> getBrokerIdsList() {
+        return getBrokerIdsList(getBrokerIds());
+    }
+
+    /**
+     * Returns the broker ids property converted to a list of ints - static version
+     *
+     * @param brokerIdsJson the source array in JSON string format
+     * @return the ids of the brokers connected in list format
+     */
+    public static List<Integer> getBrokerIdsList(String brokerIdsJson) {
+
+        List<Integer> result = null;
+
+        try {
+            Integer[] brokerIdsArray = new ObjectMapper().readValue(brokerIdsJson, Integer[].class);
+            result = Arrays.asList(brokerIdsArray);
+        } catch (JsonProcessingException exc) {
+            exc.printStackTrace();
+        }
+
+        if (result == null) {
+            result = new ArrayList<>();
+        }
+
+        return result;
     }
 
     /**

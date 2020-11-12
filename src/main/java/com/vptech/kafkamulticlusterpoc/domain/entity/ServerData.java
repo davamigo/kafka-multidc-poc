@@ -159,7 +159,7 @@ public class ServerData {
 
     /**
      * @param field the name of the field
-     * @param value the value
+     * @param value the new value
      */
     synchronized void setField(final String field, final String value) {
         this.properties.put(field, value);
@@ -167,7 +167,14 @@ public class ServerData {
 
     /**
      * @param field the name of the field
-     * @param defaultValue the defualt value
+     */
+    synchronized void removeField(final String field) {
+        this.properties.remove(field);
+    }
+
+    /**
+     * @param field the name of the field
+     * @param defaultValue the default value
      * @return the value of a field
      */
     synchronized String getField(final String field, final String defaultValue) {
