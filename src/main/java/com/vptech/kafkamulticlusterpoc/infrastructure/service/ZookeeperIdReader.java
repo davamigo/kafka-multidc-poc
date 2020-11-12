@@ -57,21 +57,25 @@ public class ZookeeperIdReader implements ServerExtraDataReader {
             return;
         }
 
-        LOGGER.debug("ZookeeperIdReader - reading ID from " + server.getName() + "...");
+        // Skip if Zookeeper id already exists...
+        ZookeeperData zookeeperData = ((ZookeeperData) server);
+        if (zookeeperData.getZookeeperId() == 0) {
 
-        String command = String.format("docker exec -t %s cat /tmp/zookeeper/myid ", server.getName());
-        String output = runner.runCommand(command);
+            LOGGER.debug("ZookeeperIdReader - reading ID from " + server.getName() + "...");
 
-        try {
-            int zookeeperId = Integer.parseInt(output);
-            if (zookeeperId > 0) {
-                LOGGER.debug("ZookeeperIdReader - The id of the server " + server.getName() + " is " + zookeeperId);
-                ZookeeperData zookeeperData = ((ZookeeperData) server);
-                zookeeperData.setZookeeperId(zookeeperId);
+            String command = String.format("docker exec -t %s cat /tmp/zookeeper/myid ", server.getName());
+            String output = runner.runCommand(command);
+
+            try {
+                int zookeeperId = Integer.parseInt(output);
+                if (zookeeperId > 0) {
+                    LOGGER.debug("ZookeeperIdReader - The id of the server " + server.getName() + " is " + zookeeperId);
+                    zookeeperData.setZookeeperId(zookeeperId);
+                }
+            } catch (NumberFormatException exc) {
+                LOGGER.error("ZookeeperIdReader - exception: " + exc.getMessage());
+                exc.printStackTrace();
             }
-        } catch (NumberFormatException exc) {
-            LOGGER.error("ZookeeperIdReader - exception: " + exc.getMessage());
-            exc.printStackTrace();
         }
     }
 }
