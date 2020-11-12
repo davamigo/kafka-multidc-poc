@@ -2,6 +2,7 @@ package com.vptech.kafkamulticlusterpoc.domain.entity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Base entity for any server data
@@ -111,7 +112,7 @@ public class ServerData {
      * @return a map of properties and values
      */
     public Map<String, String> getServerData() {
-        return new HashMap<>(this.properties);
+        return new TreeMap<>(this.properties);
     }
 
     /**

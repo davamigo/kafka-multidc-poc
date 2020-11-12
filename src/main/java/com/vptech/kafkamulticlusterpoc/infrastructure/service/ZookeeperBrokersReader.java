@@ -21,14 +21,10 @@ import java.util.regex.Pattern;
 @Service
 public class ZookeeperBrokersReader implements ServerExtraDataReader {
 
-    /**
-     * Logger
-     */
+    /** Logger */
     private static final Logger LOGGER = LoggerFactory.getLogger(ZookeeperBrokersReader.class);
 
-    /**
-     * Service to run a bash command
-     */
+    /** Service to run a bash command */
     private final BashCommandRunner runner;
 
     /**
@@ -88,6 +84,11 @@ public class ZookeeperBrokersReader implements ServerExtraDataReader {
         }
 
         for (int brokerId : brokerIdsArray) {
+
+            // Skip if broker data already exists
+            if (!zookeeperData.getBrokerData(brokerId).equals("{}")) {
+                break;
+            }
 
             LOGGER.debug("ZookeeperBrokersReader - reading broker " + brokerId + " data from " + server.getName() + "...");
             String brokerData = readBrokerData(server, brokerId);

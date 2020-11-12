@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 /**
  * Scheduled task to check the status of the servers
@@ -47,15 +48,20 @@ public class ServerStatusCheckerTask {
     @Scheduled(cron = "${app.config.scheduler.task.CheckServerStatusTask.cron:-}")
     public void checkServerStatusTask() {
 
-        LOGGER.debug("CheckServerStatusTask - starting task...");
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        LOGGER.debug("ServerStatusCheckerTask - starting task...");
         for (String serverName : storage.getServerNames()) {
 
-            LOGGER.debug("CheckServerStatusTask - checking server status of " + serverName + "...");
+            LOGGER.debug("ServerStatusCheckerTask - checking server status of " + serverName + "...");
             ServerStatus status = checker.check(serverName);
 
-            LOGGER.debug("CheckServerStatusTask - the status of server " + serverName + " is " + status.toString());
+            LOGGER.debug("ServerStatusCheckerTask - the status of server " + serverName + " is " + status.toString());
             storage.setStatus(serverName, status);
         }
-        LOGGER.debug("CheckServerStatusTask - task finished.");
+
+        watch.stop();
+        LOGGER.debug("ServerStatusCheckerTask - task finished in " + watch.getLastTaskTimeMillis() + "ms.");
     }
 }
