@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service to run a bash command and return the result
@@ -27,12 +28,30 @@ public class BashCommandRunner {
      * @return an string containing the result of the execution
      */
     public String runCommand(final String command) {
+        return runCommand(command, 15, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Executes a bash command defining the timeout
+     *
+     * @param command the command to execute
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the timeout argument
+     * @return an string containing the result of the execution
+     */
+    public String runCommand(final String command, long timeout, TimeUnit unit) {
 
         LOGGER.debug("BashCommandRunner - executing: " + command);
 
         try {
             Process process = Runtime.getRuntime().exec(command);
-            int exitCode = process.waitFor();
+            boolean success = process.waitFor(timeout, unit);
+            if (!success) {
+                LOGGER.debug("BashCommandRunner - timeout after " + unit.toMillis(timeout) + "ms.");
+                return "";
+            }
+
+            int exitCode = process.exitValue();
             LOGGER.debug("BashCommandRunner - exit code: " + exitCode);
 
             String output;
@@ -41,7 +60,7 @@ public class BashCommandRunner {
                 LOGGER.debug("BashCommandRunner - output: " + (output.isEmpty() ? "<empty>" : output.replace("\n", "\\n")));
             } else {
                 output = readStream(process.getErrorStream());
-                LOGGER.error("BashCommandRunner - error: " + output.replace("\n", "\\n"));
+                LOGGER.error("BashCommandRunner - error: " + (output.isEmpty() ? "<empty>" : output.replace("\n", "\\n")));
             }
             return output;
 
