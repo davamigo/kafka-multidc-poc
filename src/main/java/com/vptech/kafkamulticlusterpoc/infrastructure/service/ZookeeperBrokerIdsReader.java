@@ -63,7 +63,7 @@ public class ZookeeperBrokerIdsReader implements ServerExtraDataReader {
             return;
         }
 
-        // Skip if broker ids already have read...
+        // Skip if broker ids have already been read...
         ZookeeperData zookeeperData = ((ZookeeperData) server);
         if (zookeeperData.getBrokerIds().equals("[]")) {
 
