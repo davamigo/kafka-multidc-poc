@@ -96,16 +96,16 @@ public class ServerDataStorageConfiguration {
             return null;
         }
 
-        String address = readServerData(serverName, "address", "");
+        String host = readServerData(serverName, "host", "");
         String port = readServerData(serverName, "port", "0");
 
         server.setName(serverName);
         server.setLocation(ServerLocation.valueOf(serverLocation.toUpperCase()));
-        server.setAddress(address);
+        server.setHost(host);
         server.setPort(Integer.parseInt(port));
 
         LOGGER.debug("ServerDataStorage - Server data created for " + serverName + ": "
-                + serverLocation + "/" + serverType + "/" + address + ":" + port);
+                + serverLocation + "/" + serverType + "/" + host + ":" + port);
 
         return server;
     }

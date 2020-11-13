@@ -27,7 +27,7 @@ public class ServerDataTest {
         Assertions.assertEquals(ServerType.NULL, serverData.getType());
         Assertions.assertEquals(ServerStatus.UNKNOWN, serverData.getStatus());
         Assertions.assertEquals("", serverData.getName());
-        Assertions.assertEquals("", serverData.getAddress());
+        Assertions.assertEquals("", serverData.getHost());
         Assertions.assertEquals(0, serverData.getPort());
     }
 
@@ -68,12 +68,12 @@ public class ServerDataTest {
     }
 
     @Test
-    public void testSetAddressSetsTheAddress() {
+    public void testSethostSetsThehost() {
 
         ServerData serverData = new ServerData();
-        serverData.setAddress("_some_address_");
+        serverData.setHost("_some_host_");
 
-        Assertions.assertEquals("_some_address_", serverData.getAddress());
+        Assertions.assertEquals("_some_host_", serverData.getHost());
     }
 
     @Test
@@ -122,12 +122,12 @@ public class ServerDataTest {
     }
 
     @Test
-    public void testSetServerDataSetsTheAddress() {
+    public void testSetServerDataSetsThehost() {
 
         ServerData serverData = new ServerData();
-        serverData.setServerData(Collections.singletonMap("address", "_some_address_"));
+        serverData.setServerData(Collections.singletonMap("host", "_some_host_"));
 
-        Assertions.assertEquals("_some_address_", serverData.getAddress());
+        Assertions.assertEquals("_some_host_", serverData.getHost());
     }
 
     @Test
@@ -147,7 +147,7 @@ public class ServerDataTest {
         serverData.setType(ServerType.KAFKA_BROKER);
         serverData.setStatus(ServerStatus.DOWN);
         serverData.setName("_someone_");
-        serverData.setAddress("_somewhere_");
+        serverData.setHost("_somewhere_");
         serverData.setPort(3001);
 
         Map<String, String> expected = Stream.of(
@@ -155,7 +155,7 @@ public class ServerDataTest {
                 new AbstractMap.SimpleEntry<>("type", "KAFKA_BROKER"),
                 new AbstractMap.SimpleEntry<>("status", "DOWN"),
                 new AbstractMap.SimpleEntry<>("name", "_someone_"),
-                new AbstractMap.SimpleEntry<>("address", "_somewhere_"),
+                new AbstractMap.SimpleEntry<>("host", "_somewhere_"),
                 new AbstractMap.SimpleEntry<>("port", "3001")
         ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
@@ -172,7 +172,7 @@ public class ServerDataTest {
                 new AbstractMap.SimpleEntry<>("type", "NULL"),
                 new AbstractMap.SimpleEntry<>("status", "UNKNOWN"),
                 new AbstractMap.SimpleEntry<>("name", ""),
-                new AbstractMap.SimpleEntry<>("address", ""),
+                new AbstractMap.SimpleEntry<>("host", ""),
                 new AbstractMap.SimpleEntry<>("port", "0")
         ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 

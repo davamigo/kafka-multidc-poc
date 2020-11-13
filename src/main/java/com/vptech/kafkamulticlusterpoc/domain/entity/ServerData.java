@@ -18,7 +18,7 @@ public class ServerData {
     public static final String FIELD_TYPE = "type";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_NAME = "name";
-    public static final String FIELD_ADDRESS = "address";
+    public static final String FIELD_HOST = "host";
     public static final String FIELD_PORT = "port";
 
     /**
@@ -35,7 +35,7 @@ public class ServerData {
                 .setType(ServerType.NULL)
                 .setStatus(ServerStatus.UNKNOWN)
                 .setName("")
-                .setAddress("")
+                .setHost("")
                 .setPort(0);
     }
 
@@ -89,11 +89,11 @@ public class ServerData {
     }
 
     /**
-     * @param address the address of the server
+     * @param host address of the server
      * @return this
      */
-    public ServerData setAddress(String address) {
-        this.setField(FIELD_ADDRESS, address);
+    public ServerData setHost(String host) {
+        this.setField(FIELD_HOST, host);
         return this;
     }
 
@@ -144,10 +144,10 @@ public class ServerData {
     }
 
     /**
-     * @return the address of the server
+     * @return the host address of the server
      */
-    public String getAddress() {
-        return getField(FIELD_ADDRESS, "");
+    public String getHost() {
+        return getField(FIELD_HOST, "");
     }
 
     /**

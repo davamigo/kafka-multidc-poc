@@ -19,7 +19,7 @@ app:
           cron: "*/10 * * * * *"
 
         ServerDataExtraDataReaderTask:
-          cron: "*/30 * * * * *"
+          cron: "*/15 * * * * *"
 
     server:
       names: >
@@ -36,47 +36,47 @@ app:
         kpoc_zookeeper1:
           location: docker
           type: zookeeper
-          address: localhost
+          host: localhost
           port: 2181
 
         kpoc_zookeeper2:
           location: docker
           type: zookeeper
-          address: localhost
+          host: localhost
           port: 2182
 
         kpoc_zookeeper3:
           location: docker
           type: zookeeper
-          address: localhost
+          host: localhost
           port: 2183
 
         kpoc_broker1:
           location: docker
           type: kafka_broker
-          address: localhost
+          host: localhost
           port: 9092
 
         kpoc_broker2:
           location: docker
           type: kafka_broker
-          address: localhost
+          host: localhost
           port: 9093
 
         kpoc_broker3:
           location: docker
           type: kafka_broker
-          address: localhost
+          host: localhost
           port: 9094
 
         kpoc_broker4:
           location: docker
           type: kafka_broker
-          address: localhost
+          host: localhost
           port: 9095
 
         kpoc_broker5:
           location: docker
           type: kafka_broker
-          address: localhost
+          host: localhost
           port: 9096

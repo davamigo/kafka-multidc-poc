@@ -220,7 +220,7 @@ public class ZookeeperDataTest {
 
         Assertions.assertEquals(0, zookeeperData.getZookeeperId());
         Assertions.assertEquals("[]", zookeeperData.getBrokerIds());
-        Assertions.assertEquals("{}}", zookeeperData.getBrokerData(2));
-        Assertions.assertEquals("{}}", zookeeperData.getBrokerData(8));
+        Assertions.assertEquals("{}", zookeeperData.getBrokerData(2));
+        Assertions.assertEquals("{}", zookeeperData.getBrokerData(8));
     }
 }
