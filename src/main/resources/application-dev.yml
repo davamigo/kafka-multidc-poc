@@ -1,0 +1,78 @@
+app:
+  config:
+    scheduler:
+      threads: 5
+
+      task:
+        CheckServerStatusTask:
+          cron: "*/10 * * * * *"
+
+        ServerDataExtraDataReaderTask:
+          cron: "*/15 * * * * *"
+
+    server:
+      names: >
+        kpoc_zookeeper1,
+        kpoc_zookeeper2,
+        kpoc_zookeeper3,
+        kpoc_broker1,
+        kpoc_broker2,
+        kpoc_broker3,
+        kpoc_broker4,
+        kpoc_broker5
+
+      data:
+        kpoc_zookeeper1:
+          location: docker
+          type: zookeeper
+          host: localhost
+          port: 2181
+
+        kpoc_zookeeper2:
+          location: docker
+          type: zookeeper
+          host: localhost
+          port: 2182
+
+        kpoc_zookeeper3:
+          location: docker
+          type: zookeeper
+          host: localhost
+          port: 2183
+
+        kpoc_broker1:
+          location: docker
+          type: kafka_broker
+          host: localhost
+          port: 9092
+
+        kpoc_broker2:
+          location: docker
+          type: kafka_broker
+          host: localhost
+          port: 9093
+
+        kpoc_broker3:
+          location: docker
+          type: kafka_broker
+          host: localhost
+          port: 9094
+
+        kpoc_broker4:
+          location: docker
+          type: kafka_broker
+          host: localhost
+          port: 9095
+
+        kpoc_broker5:
+          location: docker
+          type: kafka_broker
+          host: localhost
+          port: 9096
+
+logging:
+  level:
+    com:
+      vptech:
+        kafkamulticlusterpoc:
+          infrastructure: info;

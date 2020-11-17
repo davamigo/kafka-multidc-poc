@@ -2,81 +2,22 @@ spring:
   application:
     name: "kafka-multicluster-poc"
 
-logging:
-  level:
-    com:
-      vptech:
-        kafkamulticlusterpoc:
-          infrastructure: info;
-
 app:
   config:
     scheduler:
-      threads: 5
+      threads: 1
 
       task:
         CheckServerStatusTask:
-          cron: "*/10 * * * * *"
+          cron: "-"
 
         ServerDataExtraDataReaderTask:
-          cron: "*/15 * * * * *"
+          cron: "-"
+
+    topic:
+      acks_all: topic.acks.all
+      acks_1:   topic.acks.1
+      acks_0:   topic.acks.0
 
     server:
-      names: >
-        kpoc_zookeeper1,
-        kpoc_zookeeper2,
-        kpoc_zookeeper3,
-        kpoc_broker1,
-        kpoc_broker2,
-        kpoc_broker3,
-        kpoc_broker4,
-        kpoc_broker5
-
-      data:
-        kpoc_zookeeper1:
-          location: docker
-          type: zookeeper
-          host: localhost
-          port: 2181
-
-        kpoc_zookeeper2:
-          location: docker
-          type: zookeeper
-          host: localhost
-          port: 2182
-
-        kpoc_zookeeper3:
-          location: docker
-          type: zookeeper
-          host: localhost
-          port: 2183
-
-        kpoc_broker1:
-          location: docker
-          type: kafka_broker
-          host: localhost
-          port: 9092
-
-        kpoc_broker2:
-          location: docker
-          type: kafka_broker
-          host: localhost
-          port: 9093
-
-        kpoc_broker3:
-          location: docker
-          type: kafka_broker
-          host: localhost
-          port: 9094
-
-        kpoc_broker4:
-          location: docker
-          type: kafka_broker
-          host: localhost
-          port: 9095
-
-        kpoc_broker5:
-          location: docker
-          type: kafka_broker
-          host: localhost
-          port: 9096
+      names: ""
