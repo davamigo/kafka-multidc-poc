@@ -1,5 +1,6 @@
 package com.vptech.kafkamulticlusterpoc.infrastructure.scheduler;
 
+import com.vptech.kafkamulticlusterpoc.domain.entity.ServerData;
 import com.vptech.kafkamulticlusterpoc.domain.entity.ServerStatus;
 import com.vptech.kafkamulticlusterpoc.domain.service.ServerDataStorage;
 import com.vptech.kafkamulticlusterpoc.domain.service.ServerStatusChecker;
@@ -52,13 +53,13 @@ public class ServerStatusCheckerTask {
         watch.start();
 
         LOGGER.debug("ServerStatusCheckerTask - starting task...");
-        for (String serverName : storage.getServerNames()) {
+        for (ServerData server : storage.getServers().values()) {
 
-            LOGGER.debug("ServerStatusCheckerTask - checking server status of " + serverName + "...");
-            ServerStatus status = checker.check(serverName);
+            LOGGER.debug("ServerStatusCheckerTask - checking server status of " + server.getName() + "...");
+            ServerStatus status = checker.check(server);
 
-            LOGGER.debug("ServerStatusCheckerTask - the status of server " + serverName + " is " + status.toString());
-            storage.setStatus(serverName, status);
+            LOGGER.debug("ServerStatusCheckerTask - the status of server " + server.getName() + " is " + status.toString());
+            storage.setStatus(server.getName(), status);
         }
 
         watch.stop();

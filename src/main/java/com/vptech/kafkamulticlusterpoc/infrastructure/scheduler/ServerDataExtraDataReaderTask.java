@@ -26,7 +26,7 @@ public class ServerDataExtraDataReaderTask {
     /** Storage for the server data */
     private final ServerDataStorage storage;
 
-    /** Map of services to read some data from the servers */
+    /** List of services to read extra data from the servers */
     private final List<ServerExtraDataReader> readers;
 
     /** Array of threads to allow parallelization of data readers */

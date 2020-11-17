@@ -7,5 +7,6 @@ package com.vptech.kafkamulticlusterpoc.domain.entity;
  */
 public enum ServerLocation {
     NULL,
-    DOCKER
+    DOCKER,
+    NETWORK
 }

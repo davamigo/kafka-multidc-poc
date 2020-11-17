@@ -19,7 +19,7 @@ import org.springframework.scheduling.config.Task;
 public class SchedulerConfiguration implements SchedulingConfigurer {
 
     /** The number of threads for the task scheduler */
-    private String threads;
+    private final String threads;
 
     /**
      * Autowired constructor
