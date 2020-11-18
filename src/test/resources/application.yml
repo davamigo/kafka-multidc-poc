@@ -9,3 +9,8 @@ app:
 
         ServerDataExtraDataReaderTask:
           cron: "-"
+
+    topic:
+      acks_all: topic.acks.all
+      acks_1:   topic.acks.1
+      acks_0:   topic.acks.0

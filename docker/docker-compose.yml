@@ -5,7 +5,7 @@ services:
     build:
       context: .
     image: "blacktop/kafka:2.6-z"
-    restart: "always"
+    restart: "unless-stopped"
     container_name: "kpoc_zookeeper1"
     command: "zookeeper-server-start.sh config/zookeeper.properties"
     networks:
@@ -20,7 +20,7 @@ services:
     build:
       context: .
     image: "blacktop/kafka:2.6-z"
-    restart: "always"
+    restart: "unless-stopped"
     container_name: "kpoc_zookeeper2"
     command: "zookeeper-server-start.sh config/zookeeper.properties"
     networks:
@@ -35,7 +35,7 @@ services:
     build:
       context: .
     image: "blacktop/kafka:2.6-z"
-    restart: "always"
+    restart: "unless-stopped"
     container_name: "kpoc_zookeeper3"
     command: "zookeeper-server-start.sh config/zookeeper.properties"
     networks:
@@ -67,8 +67,9 @@ services:
       - "KAFKA_BROKER_ID=1"
       - "KAFKA_BROKER_RACK=dc1"
       - "KAFKA_NUM_PARTITIONS=7"
-      - "KAFKA_MIN_INSYNC_REPLICAS=2"
-      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_MIN_INSYNC_REPLICAS=3"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=3"
+      - "KAFKA_AUTO_CREATE_TOPICS_ENABLE=false"
       - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker1"
       - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
       - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
@@ -94,8 +95,9 @@ services:
       - "KAFKA_BROKER_ID=2"
       - "KAFKA_BROKER_RACK=dc2"
       - "KAFKA_NUM_PARTITIONS=7"
-      - "KAFKA_MIN_INSYNC_REPLICAS=2"
-      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_MIN_INSYNC_REPLICAS=3"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=3"
+      - "KAFKA_AUTO_CREATE_TOPICS_ENABLE=false"
       - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker2"
       - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
       - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
@@ -121,8 +123,9 @@ services:
       - "KAFKA_BROKER_ID=3"
       - "KAFKA_BROKER_RACK=dc1"
       - "KAFKA_NUM_PARTITIONS=7"
-      - "KAFKA_MIN_INSYNC_REPLICAS=2"
-      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_MIN_INSYNC_REPLICAS=3"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=3"
+      - "KAFKA_AUTO_CREATE_TOPICS_ENABLE=false"
       - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker3"
       - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
       - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
@@ -148,8 +151,9 @@ services:
       - "KAFKA_BROKER_ID=4"
       - "KAFKA_BROKER_RACK=dc2"
       - "KAFKA_NUM_PARTITIONS=7"
-      - "KAFKA_MIN_INSYNC_REPLICAS=2"
-      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_MIN_INSYNC_REPLICAS=3"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=3"
+      - "KAFKA_AUTO_CREATE_TOPICS_ENABLE=false"
       - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker4"
       - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
       - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
@@ -175,8 +179,9 @@ services:
       - "KAFKA_BROKER_ID=5"
       - "KAFKA_BROKER_RACK=dc1"
       - "KAFKA_NUM_PARTITIONS=7"
-      - "KAFKA_MIN_INSYNC_REPLICAS=2"
-      - "KAFKA_DEFAULT_REPLICATION_FACTOR=2"
+      - "KAFKA_MIN_INSYNC_REPLICAS=3"
+      - "KAFKA_DEFAULT_REPLICATION_FACTOR=3"
+      - "KAFKA_AUTO_CREATE_TOPICS_ENABLE=false"
       - "KAFKA_ADVERTISED_HOST_NAME=kpoc_broker5"
       - "KAFKA_ZOOKEEPER_CONNECT=kpoc_zookeeper1:2181,kpoc_zookeeper2:2181,kpoc_zookeeper3:2181"
       - "KAFKA_HEAP_OPTS=-Xmx2G -Xms2G"
