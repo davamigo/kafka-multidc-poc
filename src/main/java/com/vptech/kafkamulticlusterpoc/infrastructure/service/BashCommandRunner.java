@@ -64,9 +64,12 @@ public class BashCommandRunner {
             }
             return output;
 
-        } catch (IOException | InterruptedException exc) {
-            LOGGER.error("BashCommandRunner - exception: " + exc.getMessage());
+        } catch (IOException exc) {
+            LOGGER.error("BashCommandRunner - IOException: " + exc.getMessage());
             exc.printStackTrace();
+            return exc.getMessage();
+        } catch (InterruptedException exc) {
+            LOGGER.error("BashCommandRunner - InterruptedException: " + exc.getMessage());
             return exc.getMessage();
         }
     }

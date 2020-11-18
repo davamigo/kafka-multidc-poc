@@ -74,7 +74,6 @@ public class ZookeeperIdReader implements ServerExtraDataReader {
                 }
             } catch (NumberFormatException exc) {
                 LOGGER.error("ZookeeperIdReader - exception: " + exc.getMessage());
-                exc.printStackTrace();
             }
         }
     }

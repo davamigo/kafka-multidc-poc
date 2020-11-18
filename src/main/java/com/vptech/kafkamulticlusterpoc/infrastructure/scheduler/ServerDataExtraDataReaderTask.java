@@ -100,7 +100,7 @@ public class ServerDataExtraDataReaderTask {
                     LOGGER.debug("ServerDataExtraDataReaderTask - waiting for available threads...");
                     Thread.sleep(500);
                 } catch (InterruptedException exc) {
-                    exc.printStackTrace();
+                    LOGGER.error("ServerDataExtraDataReaderTask - exception: " + exc.getMessage());
                 }
             }
         }
