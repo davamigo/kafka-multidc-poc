@@ -190,6 +190,8 @@ public class KafkaProducer {
                     this.payload,
                     this.acks
             );
+
+            // TODO process the produced message
         }
     }
 }

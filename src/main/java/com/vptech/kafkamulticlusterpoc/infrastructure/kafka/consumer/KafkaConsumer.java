@@ -109,6 +109,6 @@ public class KafkaConsumer {
                 value
         );
 
-        // TODO
+        // TODO process the consumed message
     }
 }
