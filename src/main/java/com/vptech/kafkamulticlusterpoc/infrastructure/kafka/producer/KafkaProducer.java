@@ -46,9 +46,9 @@ public class KafkaProducer {
             KafkaTemplate<String, String> kafkaTemplateAcksAll,
             KafkaTemplate<String, String> kafkaTemplateAcks1,
             KafkaTemplate<String, String> kafkaTemplateAcks0,
-            @Value("${app.config.topic.acks_all}") String topicAcksAll,
-            @Value("${app.config.topic.acks_1}") String topicAcks1,
-            @Value("${app.config.topic.acks_0}") String topicAcks0
+            @Value("${app.config.kafka.topic.acks_all}") String topicAcksAll,
+            @Value("${app.config.kafka.topic.acks_1}") String topicAcks1,
+            @Value("${app.config.kafka.topic.acks_0}") String topicAcks0
     ) {
         this.kafkaTemplateAcksAll = kafkaTemplateAcksAll;
         this.kafkaTemplateAcks1 = kafkaTemplateAcks1;
@@ -113,10 +113,10 @@ public class KafkaProducer {
      */
     private void log(final String topic, final String acks, final String payload) {
         LOGGER.info(
-                "KafkaProducer - Topic: {} acks: {} payload: {} - Sending the message...",
+                "KafkaProducer - Publishing a message to Kafka - topic: {} - payload {} - acks: {}",
                 topic,
-                acks,
-                payload
+                payload,
+                acks
         );
     }
 
@@ -155,11 +155,11 @@ public class KafkaProducer {
         @Override
         public void onFailure(Throwable exc) {
             LOGGER.error(
-                    "KafkaProducer - Error: {} Topic: {} acks: {} payload: {}",
+                    "KafkaProducer - Error publishing a message to Kafka: {} - topic: {} - payload: {} - acks: {}",
                     exc.getMessage(),
                     topic,
-                    acks,
-                    payload
+                    payload,
+                    acks
             );
             exc.printStackTrace();
         }
@@ -183,12 +183,12 @@ public class KafkaProducer {
                 }
             }
             LOGGER.info(
-                    "KafkaProducer - Topic: {} partition: {} offset: {} acks: {} payload: {} - Message sent!",
+                    "KafkaProducer - Message produced to Kafka - topic: {} - partition: {} - offset: {} - payload: {} - acks: {}",
                     topic,
                     partition,
                     offset,
-                    this.acks,
-                    this.payload
+                    this.payload,
+                    this.acks
             );
         }
     }

@@ -128,7 +128,7 @@ public class ServerDataStorageConfiguration {
      * @return the config value
      */
     private String readServerData(final String serverName, final String field, final String defaultValue) {
-        final String key = "app.config.server.data." + serverName + "." + field;
-        return environment.getProperty(key, defaultValue);
+        final String keyName = "app.config.server.data." + serverName + "." + field;
+        return environment.getProperty(keyName, defaultValue);
     }
 }

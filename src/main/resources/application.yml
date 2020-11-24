@@ -6,6 +6,8 @@ spring:
     active: "dev"
 
 app:
+  name: ${spring.application.name}
+
   config:
     scheduler:
       threads: 1
@@ -17,10 +19,14 @@ app:
         ServerDataExtraDataReaderTask:
           cron: "-"
 
-    topic:
-      acks_all: topic.acks.all
-      acks_1:   topic.acks.1
-      acks_0:   topic.acks.0
+    kafka:
+      consumer:
+        enabled: false
+
+      topic:
+        acks_all: topic.acks.all
+        acks_1:   topic.acks.1
+        acks_0:   topic.acks.0
 
     server:
       names: ""

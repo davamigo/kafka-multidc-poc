@@ -10,6 +10,10 @@ app:
         ServerDataExtraDataReaderTask:
           cron: "*/15 * * * * *"
 
+    kafka:
+      consumer:
+        enabled: true
+
     server:
       names: >
         kpoc_zookeeper1,
@@ -67,5 +71,5 @@ app:
         kpoc_broker5:
           location: network
           type: kafka_broker
-          host: kpoc_broker4
+          host: kpoc_broker5
           port: 9092
