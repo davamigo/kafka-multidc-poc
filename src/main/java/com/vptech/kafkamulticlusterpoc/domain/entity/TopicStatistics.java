@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Entity class for handling topic data
+ * Entity class for handling topic statistics:
+ *
+ * - Count of produced and consumed messages.
+ * - List of messages produced but not consumed.
+ * - List of messages consumed but not produced.
+ * - List errors
  *
  * @author david.amigo
  */
-public class TopicData {
+public class TopicStatistics {
 
     /** The name of the topic */
     final String name;
@@ -29,7 +34,7 @@ public class TopicData {
      *
      * @param name the name of the topic
      */
-    public TopicData(String name) {
+    public TopicStatistics(String name) {
         this.name = name;
         this.producedCount = 0;
         this.consumedCount = 0;
@@ -43,7 +48,7 @@ public class TopicData {
      *
      * @param payload the payload of the message
      */
-    public void messageProduced(String payload) {
+    public void addProducedMessage(String payload) {
         producedCount++;
         if (outOfSeqMessages.contains(payload)) {
             outOfSeqMessages.remove(payload);
@@ -57,7 +62,7 @@ public class TopicData {
      *
      * @param payload the payload of the message
      */
-    public void messageConsumed(String payload) {
+    public void addConsumedMessage(String payload) {
         consumedCount++;
         if (pendingMessages.contains(payload)) {
             pendingMessages.remove(payload);
@@ -71,7 +76,7 @@ public class TopicData {
      *
      * @param payload the payload of the message
      */
-    public void errorProducingMessage(String payload) {
+    public void addErrorProducingMessage(String payload) {
         unableToProduceMessages.add(payload);
     }
 
@@ -97,13 +102,6 @@ public class TopicData {
     }
 
     /**
-     * @return the total number of messages unable to produce
-     */
-    public long getUnableToProduceCount() {
-        return unableToProduceMessages.size();
-    }
-
-    /**
      * @return the total number of messages produced but not consumed
      */
     public long getPendingMessagesCount() {
@@ -115,5 +113,12 @@ public class TopicData {
      */
     public long getOutOfSeqMessagesCount() {
         return outOfSeqMessages.size();
+    }
+
+    /**
+     * @return the total number of messages unable to produce
+     */
+    public long getUnableToProduceCount() {
+        return unableToProduceMessages.size();
     }
 }
