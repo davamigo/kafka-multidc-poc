@@ -17,13 +17,37 @@
 </ul>
 <h3>Server data</h3>
 <ul>
-    <li th:each="serverItem : ${servers}">
+    <li th:each="serverItem : ${serversMap}">
         <span th:text="${serverItem.key}"></span>
         <ul>
-            <li th:each="seerverData : ${serverItem.value.serverData}">
-                <span th:text="${seerverData.key}"></span>
+            <li th:each="serverData : ${serverItem.value.serverData}">
+                <span th:text="${serverData.key}"></span>
                 =
-                <span th:text="${seerverData.value}"></span>
+                <span th:text="${serverData.value}"></span>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<h3>Topic statistics</h3>
+<ul>
+    <li th:each="topic : ${topicList}">
+        <span th:text="${topic.name}"></span>
+        <ul>
+            <li>
+                Produced = <span th:text="${topic.getProducedCount()}"></span>
+            </li>
+            <li>
+                Consumed = <span th:text="${topic.getConsumedCount()}"></span>
+            </li>
+            <li>
+                Unable to produce = <span th:text="${topic.getUnableToProduceCount()}"></span>
+            </li>
+            <li>
+                Produced pending to consume = <span th:text="${topic.getPendingMessagesCount()}"></span>
+            </li>
+            <li>
+                Consumed out of sequence = <span th:text="${topic.getOutOfSeqMessagesCount()}"></span>
             </li>
         </ul>
     </li>
