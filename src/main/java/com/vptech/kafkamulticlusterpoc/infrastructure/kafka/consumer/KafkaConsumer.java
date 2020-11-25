@@ -1,7 +1,9 @@
 package com.vptech.kafkamulticlusterpoc.infrastructure.kafka.consumer;
 
+import com.vptech.kafkamulticlusterpoc.domain.service.TopicStatisticsStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -18,6 +20,19 @@ public class KafkaConsumer {
 
     /** Logger */
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumer.class);
+
+    /** Topic statistics storage - to count the consumed messages */
+    private final TopicStatisticsStorage topicsStats;
+
+    /**
+     * Autowired constructor
+     *
+     * @param topicsStats the topic statistics storage
+     */
+    @Autowired
+    public KafkaConsumer(TopicStatisticsStorage topicsStats) {
+        this.topicsStats = topicsStats;
+    }
 
     /**
      * Kafka listener for topic "topic.acks.all"
@@ -109,6 +124,6 @@ public class KafkaConsumer {
                 value
         );
 
-        // TODO process the consumed message
+        topicsStats.addConsumedMessage(topic, value);
     }
 }
