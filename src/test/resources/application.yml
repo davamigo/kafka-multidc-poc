@@ -16,6 +16,8 @@ app:
       consumer:
         enabled: false
 
+      topics: ""
+
       topic:
         acks_all: topic.acks.all
         acks_1:   topic.acks.1

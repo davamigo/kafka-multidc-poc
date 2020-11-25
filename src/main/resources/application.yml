@@ -23,6 +23,11 @@ app:
       consumer:
         enabled: false
 
+      topics: >
+        acks_all,
+        acks_1,
+        acks_0
+
       topic:
         acks_all: topic.acks.all
         acks_1:   topic.acks.1

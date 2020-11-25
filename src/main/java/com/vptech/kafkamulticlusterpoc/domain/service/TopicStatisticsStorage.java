@@ -11,7 +11,7 @@ import java.util.Map;
  * Service to store the live statistics of the topics
  *
  * Note: No @Service annotation because the bean is created in a @Configuration class called
- * ServerDataStorageConfiguration
+ * TopicStatisticsStorageConfiguration - to load the initial data
  *
  * @author david.amigo
  */

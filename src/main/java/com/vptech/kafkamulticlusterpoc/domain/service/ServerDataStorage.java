@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Service to store the data and the status of the servers
  *
  * Note: No @Service annotation because the bean is created in a @Configuration class called
- * ServerDataStorageConfiguration
+ * ServerDataStorageConfiguration - to load the initial data
  *
  * @author david.amigo
  */
