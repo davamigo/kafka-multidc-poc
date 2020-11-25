@@ -21,7 +21,7 @@ import java.util.List;
 public class PrimaryServerStatusChecker implements ServerStatusChecker {
 
     /** List of available services to check the status of a server */
-    private final List<ServerStatusChecker> services;
+    final List<ServerStatusChecker> services;
 
     /**
      * Autowired constructor
@@ -53,7 +53,8 @@ public class PrimaryServerStatusChecker implements ServerStatusChecker {
     @Override
     public ServerStatus check(ServerData server) {
         for (ServerStatusChecker checker : this.services) {
-            if (checker.validLocations().contains(server.getLocation())) {
+            ServerLocation location = server.getLocation();
+            if (checker.validLocations().contains(location)) {
                 return checker.check(server);
             }
         }
