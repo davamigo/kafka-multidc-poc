@@ -158,6 +158,8 @@ public class KafkaProducer {
          */
         @Override
         public void onFailure(Throwable exc) {
+            topicsStats.addErrorProducingMessage(this.topic, this.payload);
+
             LOGGER.error(
                     "KafkaProducer - Error publishing a message to Kafka: {} - topic: {} - payload: {} - acks: {}",
                     exc.getMessage(),
@@ -165,8 +167,8 @@ public class KafkaProducer {
                     payload,
                     acks
             );
+
             exc.printStackTrace();
-            topicsStats.addErrorProducingMessage(topic, payload);
         }
 
         /**
@@ -176,6 +178,8 @@ public class KafkaProducer {
          */
         @Override
         public void onSuccess(SendResult<String, String> result) {
+            topicsStats.addProducedMessage(this.topic, this.payload);
+
             String topic = this.topic;
             int partition = -1;
             long offset = -1;
@@ -197,7 +201,6 @@ public class KafkaProducer {
                     this.acks
             );
 
-            topicsStats.addProducedMessage(topic, payload);
         }
     }
 }
