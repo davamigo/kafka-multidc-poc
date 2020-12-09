@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta th:replace="fragments/header :: metas" />
+    <link th:replace="fragments/header :: stylesheets" />
+
+    <title>Topics - Kafka Multi-DC cluster PoC</title>
+</head>
+<body>
+<div class="container-fluid">
+
+    <h1>Kafka Multi-DC cluster PoC</h1>
+
+    <h2>Topics</h2>
+
+    <div th:each="topic : ${topics}">
+        <hr>
+        <h3 th:text="${topic}"></h3>
+        <div th:id="${'bar-' +  topic + '-main'}"
+             th:data-topic-name="${topic}"
+             class="progress">
+
+            <div th:id="${'bar-' + topic + '-produced'}"
+                 th:data-bar-type="produced"
+                 class="progress-bar bg-success"
+                 role="progressbar"
+                 style="width: 0;"
+                 aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="0">produced: 0</div>
+
+            <div th:id="${'bar-' + topic + '-pending'}"
+                 th:data-bar-type="pending"
+                 class="progress-bar bg-warning"
+                 role="progressbar"
+                 style="width: 0;"
+                 aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="0">pending: 0</div>
+
+            <div th:id="${'bar-' + topic + '-consumed'}"
+                 th:data-bar-type="consumed"
+                 class="progress-bar bg-info"
+                 role="progressbar"
+                 style="width: 0;"
+                 aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="0">consumed: 0</div>
+
+            <div th:id="${'bar-' + topic + '-outofseq'}"
+                 th:data-bar-type="outofseq"
+                 class="progress-bar bg-warning"
+                 role="progressbar"
+                 style="width: 0;"
+                 aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="0">outofseq: 0</div>
+
+            <div th:id="${'bar-' + topic + '-errors'}"
+                 th:data-bar-type="errors"
+                 class="progress-bar bg-danger"
+                 role="progressbar"
+                 style="width: 0;"
+                 aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="0">errors: 0</div>
+        </div>
+        <div th:id="${'list-' +  topic + '-main'}">
+            <div>
+                <strong>Pending</strong>:
+                <span th:id="${'list-' +  topic + '-pending'}">[]</span>
+                <br><small><i>(messages produced but not consumed)</i></small>
+            </div>
+            <div>
+                <strong>Out of sequence</strong>:
+                <span th:id="${'list-' +  topic + '-outofseq'}">[]</span>
+                <br><small><i>(messages consumed but not produced)</i></small>
+            </div>
+            <div>
+                <strong>Errors</strong>:
+                <span th:id="${'list-' +  topic + '-errors'}">[]</span>
+                <br><small><i>(messages unable to be produced)</i></small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: scripts"></div>
+<script th:src="@{/js/topics.js}"></script>
+</body>
+</html>

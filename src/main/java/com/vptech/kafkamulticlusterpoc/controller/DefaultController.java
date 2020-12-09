@@ -30,46 +30,63 @@ public class DefaultController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultController.class);
 
     /** The server data storage service */
-    private final ServerDataStorage serverData;
+    private final ServerDataStorage serverDataStorage;
 
     /** The topic statistics storage service */
-    private final TopicStatisticsStorage topicStatistics;
+    private final TopicStatisticsStorage topicsStatsStorage;
 
     /**
      * Autowired constructor
      *
-     * @param serverData      the server data storage service
-     * @param topicStatistics the topic statistics storage service
+     * @param serverDataStorage  the server data storage service
+     * @param topicsStatsStorage the topic statistics storage service
      */
     @Autowired
     public DefaultController(
-            final ServerDataStorage serverData,
-            final TopicStatisticsStorage topicStatistics
+            final ServerDataStorage serverDataStorage,
+            final TopicStatisticsStorage topicsStatsStorage
     ) {
-        this.serverData = serverData;
-        this.topicStatistics = topicStatistics;
+        this.serverDataStorage = serverDataStorage;
+        this.topicsStatsStorage = topicsStatsStorage;
     }
 
     /**
-     * Default Homepage
+     * Default page
      *
      * Path: /
-     * Params: -
      *
      * @return the HTML of the home page
      */
     @GetMapping("/")
-    public ModelAndView homepage() {
-        LOGGER.debug("DefaultController.homepage");
+    public ModelAndView defaultAction() {
+        LOGGER.debug("DefaultController.defaultAction()");
 
-        Map<String, ServerStatus> statusMap = serverData.getStatusMap();
-        Map<String, ServerData> serversMap = serverData.getServers();
-        List<TopicStatistics> topicList = topicStatistics.getAllTopicStatistics();
+        final Map<String, ServerStatus> statusMap = serverDataStorage.getStatusMap();
+        final Map<String, ServerData> serversMap = serverDataStorage.getServers();
+        final List<TopicStatistics> topicList = topicsStatsStorage.getAllTopicStatistics();
 
-        final ModelAndView mav = new ModelAndView("default/homepage");
+        final ModelAndView mav = new ModelAndView("default/default");
         mav.addObject("statusMap", statusMap);
         mav.addObject("serversMap", serversMap);
         mav.addObject("topicList", topicList);
+        return mav;
+    }
+
+    /**
+     * Topics list page
+     *
+     * Path: /topics
+     *
+     * @return the HTML of the home page
+     */
+    @GetMapping("/topics")
+    public ModelAndView topicsAction() {
+        LOGGER.debug("DefaultController.topicsAction()");
+
+        final List<String> topics = topicsStatsStorage.getAllTopics();
+
+        final ModelAndView mav = new ModelAndView("default/topics");
+        mav.addObject("topics", topics);
         return mav;
     }
 }
