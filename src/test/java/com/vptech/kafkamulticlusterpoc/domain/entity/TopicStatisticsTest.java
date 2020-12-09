@@ -153,7 +153,7 @@ public class TopicStatisticsTest {
 
         TopicStatistics stats = new TopicStatistics("_test_");
 
-        Assertions.assertEquals(0,  stats.getUnableToProduceCount());
+        Assertions.assertEquals(0,  stats.getUnableToProduceMessagesCount());
     }
 
     @Test
@@ -162,7 +162,7 @@ public class TopicStatisticsTest {
         TopicStatistics stats = new TopicStatistics("_test_");
         stats.addErrorProducingMessage("601");
 
-        Assertions.assertEquals(1,  stats.getUnableToProduceCount());
+        Assertions.assertEquals(1,  stats.getUnableToProduceMessagesCount());
     }
 
     @Test
@@ -172,6 +172,6 @@ public class TopicStatisticsTest {
         stats.addErrorProducingMessage("602");
         stats.addErrorProducingMessage("603");
 
-        Assertions.assertEquals(2,  stats.getUnableToProduceCount());
+        Assertions.assertEquals(2,  stats.getUnableToProduceMessagesCount());
     }
 }

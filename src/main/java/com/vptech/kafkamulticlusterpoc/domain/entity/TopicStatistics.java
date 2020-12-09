@@ -49,12 +49,7 @@ public class TopicStatistics {
      * @param payload the payload of the message
      */
     public void addProducedMessage(String payload) {
-        producedCount++;
-        if (outOfSeqMessages.contains(payload)) {
-            outOfSeqMessages.remove(payload);
-        } else {
-            pendingMessages.add(payload);
-        }
+        store("producedMessage", payload);
     }
 
     /**
@@ -63,12 +58,7 @@ public class TopicStatistics {
      * @param payload the payload of the message
      */
     public void addConsumedMessage(String payload) {
-        consumedCount++;
-        if (pendingMessages.contains(payload)) {
-            pendingMessages.remove(payload);
-        } else {
-            outOfSeqMessages.add(payload);
-        }
+        store("consumedMessage", payload);
     }
 
     /**
@@ -77,7 +67,7 @@ public class TopicStatistics {
      * @param payload the payload of the message
      */
     public void addErrorProducingMessage(String payload) {
-        unableToProduceMessages.add(payload);
+        store("unableToProduce", payload);
     }
 
     /**
@@ -109,6 +99,13 @@ public class TopicStatistics {
     }
 
     /**
+     * @return a copy of the messages produced but not consumed list
+     */
+    public List<String> getPendingMessages() {
+        return new ArrayList<>(pendingMessages);
+    }
+
+    /**
      * @return the total number of messages consumed but not produced
      */
     public long getOutOfSeqMessagesCount() {
@@ -116,9 +113,55 @@ public class TopicStatistics {
     }
 
     /**
+     * @return a copy of the messages consumed but not produced list
+     */
+    public List<String> getOutOfSeqMessages() {
+        return new ArrayList<>(outOfSeqMessages);
+    }
+
+    /**
      * @return the total number of messages unable to produce
      */
-    public long getUnableToProduceCount() {
+    public long getUnableToProduceMessagesCount() {
         return unableToProduceMessages.size();
+    }
+
+    /**
+     * @return a copy of the unable to produce messages list
+     */
+    public List<String> getUnableToProduceMessages() {
+        return new ArrayList<>(unableToProduceMessages);
+    }
+
+    /**
+     * Synchronized function to store the data in the object
+     *
+     * @param concept the concept: "producedMessage", "consumedMessage" or "unableToProduce"
+     * @param payload the payload of the message
+     */
+    synchronized private void store(final String concept, final String payload) {
+        switch (concept) {
+            case "producedMessage":
+                producedCount++;
+                if (outOfSeqMessages.contains(payload)) {
+                    outOfSeqMessages.remove(payload);
+                } else {
+                    pendingMessages.add(payload);
+                }
+                break;
+
+            case "consumedMessage":
+                consumedCount++;
+                if (pendingMessages.contains(payload)) {
+                    pendingMessages.remove(payload);
+                } else {
+                    outOfSeqMessages.add(payload);
+                }
+                break;
+
+            case "unableToProduce":
+                unableToProduceMessages.add(payload);
+                break;
+        }
     }
 }

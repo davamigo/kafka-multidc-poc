@@ -21,31 +21,40 @@ public class TopicStatisticsStorage {
     private final Map<String, TopicStatistics> statistics  = new HashMap<>();
 
     /**
-     * Adds a new topic to the storage if it doesn't exist
+     * Get a list of topic names
      *
-     * @param topicName the name of the topic
+     * @return a list of topic names
      */
-    public void addTopic(final String topicName) {
-        statistics.putIfAbsent(topicName, new TopicStatistics(topicName));
+    public List<String> getAllTopics() {
+        return new ArrayList<>(statistics.keySet());
+    }
+
+    /**
+     * Get the current statistics of all the topics
+     *
+     * @return a list of topic statistics
+     */
+    public List<TopicStatistics> getAllTopicStatistics() {
+        return new ArrayList<>(statistics.values());
     }
 
     /**
      * Get the current statistics of a topic
      *
      * @param topicName the name of the topic
-     * @return the statistics of the topic
+     * @return the statistics of the topic or null
      */
     public TopicStatistics getTopicStatistics(final String topicName) {
         return statistics.get(topicName);
     }
 
     /**
-     * Get the current statistics of al the topics
+     * Adds a new topic to the storage if it doesn't exist
      *
-     * @return a list of topic statistics
+     * @param topicName the name of the topic
      */
-    public List<TopicStatistics> getAllTopicStatistics() {
-        return new ArrayList<>(statistics.values());
+    public void addTopic(final String topicName) {
+        statistics.putIfAbsent(topicName, new TopicStatistics(topicName));
     }
 
     /**

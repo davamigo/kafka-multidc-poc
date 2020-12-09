@@ -119,7 +119,7 @@ public class TopicStatisticsStorageTest {
         storage.addTopic("_topic_501_");
         storage.addErrorProducingMessage("_topic_501_", "_some_payload_");
 
-        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_501_").getUnableToProduceCount());
+        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_501_").getUnableToProduceMessagesCount());
     }
 
     @Test
