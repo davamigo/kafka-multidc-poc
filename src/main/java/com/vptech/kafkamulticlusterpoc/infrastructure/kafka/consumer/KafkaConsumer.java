@@ -124,6 +124,6 @@ public class KafkaConsumer {
                 value
         );
 
-        topicsStats.addConsumedMessage(topic, value);
+        topicsStats.addConsumedMessageSuccessfully(topic, value);
     }
 }

@@ -75,7 +75,7 @@ public class TopicStatisticsStorageTest {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
         storage.addTopic("_topic_301_");
-        storage.addProducedMessage("_topic_301_", "_some_payload_");
+        storage.addMessageProducedSuccessfully("_topic_301_", "_some_payload_");
 
         Assertions.assertEquals(1, storage.getTopicStatistics("_topic_301_").getProducedCount());
     }
@@ -87,7 +87,7 @@ public class TopicStatisticsStorageTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> storage.addProducedMessage("_topic_302_", "_some_payload_")
+                () -> storage.addMessageProducedSuccessfully("_topic_302_", "_some_payload_")
         );
     }
 
@@ -96,7 +96,7 @@ public class TopicStatisticsStorageTest {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
         storage.addTopic("_topic_401_");
-        storage.addConsumedMessage("_topic_401_", "_some_payload_");
+        storage.addConsumedMessageSuccessfully("_topic_401_", "_some_payload_");
 
         Assertions.assertEquals(1, storage.getTopicStatistics("_topic_401_").getConsumedCount());
     }
@@ -108,7 +108,7 @@ public class TopicStatisticsStorageTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> storage.addConsumedMessage("_topic_402_", "_some_payload_")
+                () -> storage.addConsumedMessageSuccessfully("_topic_402_", "_some_payload_")
         );
     }
 
@@ -117,9 +117,9 @@ public class TopicStatisticsStorageTest {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
         storage.addTopic("_topic_501_");
-        storage.addErrorProducingMessage("_topic_501_", "_some_payload_");
+        storage.addMessageNotProduced("_topic_501_", "_some_payload_");
 
-        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_501_").getUnableToProduceMessagesCount());
+        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_501_").getMessagesNotProducedBecauseAnErrorCount());
     }
 
     @Test
@@ -129,7 +129,7 @@ public class TopicStatisticsStorageTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> storage.addErrorProducingMessage("_topic_502_", "_some_payload_")
+                () -> storage.addMessageNotProduced("_topic_502_", "_some_payload_")
         );
     }
 }

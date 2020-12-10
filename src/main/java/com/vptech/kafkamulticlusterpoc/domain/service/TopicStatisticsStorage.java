@@ -58,39 +58,51 @@ public class TopicStatisticsStorage {
     }
 
     /**
+     * A message has been sent to the producer
+     *
+     * @param topicName the name of the topic
+     * @param payload   the payload of the message
+     * @throws IllegalArgumentException when the topic doesn't exist in the storage
+     */
+    public void addMessageSentToBeProduced(final String topicName, final String payload) {
+        checkTopicExist(topicName);
+        statistics.get(topicName).addMessageSentToBeProduced(payload);
+    }
+
+    /**
      * A message has been produced successfully
      *
      * @param topicName the name of the topic
      * @param payload   the payload of the message
      * @throws IllegalArgumentException when the topic doesn't exist in the storage
      */
-    public void addProducedMessage(final String topicName, final String payload) {
+    public void addMessageProducedSuccessfully(final String topicName, final String payload) {
         checkTopicExist(topicName);
-        statistics.get(topicName).addProducedMessage(payload);
+        statistics.get(topicName).addMessageProducedSuccessfully(payload);
     }
 
     /**
      * A message has been consumed successfully
      *
      * @param topicName the name of the topic
-     * @param payload the payload of the message
+     * @param payload   the payload of the message
      * @throws IllegalArgumentException when the topic doesn't exist in the storage
      */
-    public void addConsumedMessage(final String topicName, final String payload) {
+    public void addConsumedMessageSuccessfully(final String topicName, final String payload) {
         checkTopicExist(topicName);
-        statistics.get(topicName).addConsumedMessage(payload);
+        statistics.get(topicName).addConsumedMessageSuccessfully(payload);
     }
 
     /**
      * An error occurred producing a message
      *
      * @param topicName the name of the topic
-     * @param payload the payload of the message
+     * @param payload   the payload of the message
      * @throws IllegalArgumentException when the topic doesn't exist in the storage
      */
-    public void addErrorProducingMessage(final String topicName, final String payload) {
+    public void addMessageNotProduced(final String topicName, final String payload) {
         checkTopicExist(topicName);
-        statistics.get(topicName).addErrorProducingMessage(payload);
+        statistics.get(topicName).addMessageNotProduced(payload);
     }
 
     /**

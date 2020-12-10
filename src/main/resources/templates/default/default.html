@@ -41,13 +41,16 @@
                 Consumed = <span th:text="${topic.getConsumedCount()}"></span>
             </li>
             <li>
-                Unable to produce = <span th:text="${topic.getUnableToProduceMessagesCount()}"></span>
+                Sent to be produced = <span th:text="${topic.getMessagesSentToProducerCount()}"></span>
             </li>
             <li>
-                Produced pending to consume = <span th:text="${topic.getPendingMessagesCount()}"></span>
+                Not produced because an error = <span th:text="${topic.getMessagesNotProducedBecauseAnErrorCount()}"></span>
             </li>
             <li>
-                Consumed out of sequence = <span th:text="${topic.getOutOfSeqMessagesCount()}"></span>
+                Produced but not consumed = <span th:text="${topic.getMessagesProducedNotConsumedCount()}"></span>
+            </li>
+            <li>
+                Consumed but not produced = <span th:text="${topic.getMessagesConsumedNotProducedCount()}"></span>
             </li>
         </ul>
     </li>

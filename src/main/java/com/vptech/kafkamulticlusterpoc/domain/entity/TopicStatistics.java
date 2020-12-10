@@ -7,9 +7,10 @@ import java.util.List;
  * Entity class for handling topic statistics:
  *
  * - Count of produced and consumed messages.
+ * - List of messages sent to the producer.
  * - List of messages produced but not consumed.
  * - List of messages consumed but not produced.
- * - List errors
+ * - List of messages not produced because an error.
  *
  * @author david.amigo
  */
@@ -22,12 +23,19 @@ public class TopicStatistics {
     long producedCount;
     long consumedCount;
 
-    /** List of messages produced but not consumed or vice versa */
-    final List<String> pendingMessages;
-    final List<String> outOfSeqMessages;
+    /** Lists of messages */
+    final List<String> messagesSentToProducer;
+    final List<String> messagesProducedNotConsumed;
+    final List<String> messagesConsumedNotProduced;
+    final List<String> messagesNotProducedBecauseAnError;
 
-    /** List of messages unable to produce */
-    final List<String> unableToProduceMessages;
+    /** Allowed actions over the messages */
+    enum Action {
+        SENT_TO_BE_PRODUCED,
+        PRODUCED_SUCCESSFULLY,
+        CONSUMED_SUCCESSFULLY,
+        NOT_PRODUCED
+    }
 
     /**
      * Constructor
@@ -38,9 +46,19 @@ public class TopicStatistics {
         this.name = name;
         this.producedCount = 0;
         this.consumedCount = 0;
-        this.pendingMessages = new ArrayList<>();
-        this.outOfSeqMessages = new ArrayList<>();
-        this.unableToProduceMessages = new ArrayList<>();
+        this.messagesSentToProducer = new ArrayList<>();
+        this.messagesProducedNotConsumed = new ArrayList<>();
+        this.messagesConsumedNotProduced = new ArrayList<>();
+        this.messagesNotProducedBecauseAnError = new ArrayList<>();
+    }
+
+    /**
+     * A message has been sent to be produced
+     *
+     * @param payload the payload of the message
+     */
+    public void addMessageSentToBeProduced(String payload) {
+        store(Action.SENT_TO_BE_PRODUCED, payload);
     }
 
     /**
@@ -48,8 +66,8 @@ public class TopicStatistics {
      *
      * @param payload the payload of the message
      */
-    public void addProducedMessage(String payload) {
-        store("producedMessage", payload);
+    public void addMessageProducedSuccessfully(String payload) {
+        store(Action.PRODUCED_SUCCESSFULLY, payload);
     }
 
     /**
@@ -57,8 +75,8 @@ public class TopicStatistics {
      *
      * @param payload the payload of the message
      */
-    public void addConsumedMessage(String payload) {
-        store("consumedMessage", payload);
+    public void addConsumedMessageSuccessfully(String payload) {
+        store(Action.CONSUMED_SUCCESSFULLY, payload);
     }
 
     /**
@@ -66,8 +84,8 @@ public class TopicStatistics {
      *
      * @param payload the payload of the message
      */
-    public void addErrorProducingMessage(String payload) {
-        store("unableToProduce", payload);
+    public void addMessageNotProduced(String payload) {
+        store(Action.NOT_PRODUCED, payload);
     }
 
     /**
@@ -92,75 +110,99 @@ public class TopicStatistics {
     }
 
     /**
+     * @return the total number of messages sent to the producer
+     */
+    public long getMessagesSentToProducerCount() {
+        return messagesSentToProducer.size();
+    }
+
+    /**
+     * @return a copy of the messages sent to the producer list
+     */
+    public List<String> getMessagesSentToProducer() {
+        return new ArrayList<>(messagesSentToProducer);
+    }
+
+    /**
      * @return the total number of messages produced but not consumed
      */
-    public long getPendingMessagesCount() {
-        return pendingMessages.size();
+    public long getMessagesProducedNotConsumedCount() {
+        return messagesProducedNotConsumed.size();
     }
 
     /**
      * @return a copy of the messages produced but not consumed list
      */
-    public List<String> getPendingMessages() {
-        return new ArrayList<>(pendingMessages);
+    public List<String> getMessagesProducedNotConsumed() {
+        return new ArrayList<>(messagesProducedNotConsumed);
     }
 
     /**
      * @return the total number of messages consumed but not produced
      */
-    public long getOutOfSeqMessagesCount() {
-        return outOfSeqMessages.size();
+    public long getMessagesConsumedNotProducedCount() {
+        return messagesConsumedNotProduced.size();
     }
 
     /**
      * @return a copy of the messages consumed but not produced list
      */
-    public List<String> getOutOfSeqMessages() {
-        return new ArrayList<>(outOfSeqMessages);
+    public List<String> getMessagesConsumedNotProduced() {
+        return new ArrayList<>(messagesConsumedNotProduced);
     }
 
     /**
      * @return the total number of messages unable to produce
      */
-    public long getUnableToProduceMessagesCount() {
-        return unableToProduceMessages.size();
+    public long getMessagesNotProducedBecauseAnErrorCount() {
+        return messagesNotProducedBecauseAnError.size();
     }
 
     /**
      * @return a copy of the unable to produce messages list
      */
-    public List<String> getUnableToProduceMessages() {
-        return new ArrayList<>(unableToProduceMessages);
+    public List<String> getMessagesNotProducedBecauseAnError() {
+        return new ArrayList<>(messagesNotProducedBecauseAnError);
     }
 
     /**
      * Synchronized function to store the data in the object
      *
-     * @param concept the concept: "producedMessage", "consumedMessage" or "unableToProduce"
+     * @param action  SENT_TO_PRODUCER, PRODUCED_NOT_CONSUMED, CONSUMED_NOT_PRODUCED, NOT_PRODUCED_BECAUSE_AN_ERROR
      * @param payload the payload of the message
      */
-    synchronized private void store(final String concept, final String payload) {
-        switch (concept) {
-            case "producedMessage":
+    synchronized private void store(final Action action, final String payload) {
+        switch (action) {
+
+            case SENT_TO_BE_PRODUCED:
+                if (!messagesSentToProducer.contains(payload)) {
+                    messagesSentToProducer.add(payload);
+                }
+                break;
+
+            case PRODUCED_SUCCESSFULLY:
                 producedCount++;
-                if (outOfSeqMessages.contains(payload)) {
-                    outOfSeqMessages.remove(payload);
-                } else {
-                    pendingMessages.add(payload);
+                messagesSentToProducer.remove(payload);
+                if (messagesConsumedNotProduced.contains(payload)) {
+                    messagesConsumedNotProduced.remove(payload);
+                } else if (!messagesProducedNotConsumed.contains(payload)){
+                    messagesProducedNotConsumed.add(payload);
                 }
                 break;
 
-            case "consumedMessage":
+            case CONSUMED_SUCCESSFULLY:
                 consumedCount++;
-                if (pendingMessages.contains(payload)) {
-                    pendingMessages.remove(payload);
-                } else {
-                    outOfSeqMessages.add(payload);
+                messagesSentToProducer.remove(payload);
+                if (messagesProducedNotConsumed.contains(payload)) {
+                    messagesProducedNotConsumed.remove(payload);
+                } else if (!messagesConsumedNotProduced.contains(payload)){
+                    messagesConsumedNotProduced.add(payload);
                 }
                 break;
 
-            case "unableToProduce":
-                unableToProduceMessages.add(payload);
+            case NOT_PRODUCED:
+                messagesSentToProducer.remove(payload);
+                messagesNotProducedBecauseAnError.add(payload);
                 break;
         }
     }

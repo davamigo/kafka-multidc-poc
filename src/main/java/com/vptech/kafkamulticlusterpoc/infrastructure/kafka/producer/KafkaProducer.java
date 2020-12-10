@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Service to produce to Kafka
@@ -109,14 +110,57 @@ public class KafkaProducer {
             final String acks,
             final String payload
     ) {
+        topicsStats.addMessageSentToBeProduced(topic, payload);
+
         LOGGER.info(
                 "KafkaProducer - Publishing a message to Kafka - topic: {} - payload {} - acks: {}",
                 topic,
                 payload,
                 acks
         );
-        ListenableFuture<SendResult<String, String>> future = template.send(topic, payload);
-        future.addCallback(new OnResultCallback(topicsStats, topic, acks, payload));
+
+        try {
+            SendResult<String, String> result = template.send(topic, payload).get();
+
+            topicsStats.addMessageProducedSuccessfully(topic, payload);
+
+            int partition = -1;
+            long offset = -1;
+            if (result != null) {
+                RecordMetadata metadata = result.getRecordMetadata();
+                if (metadata != null) {
+                    partition = metadata.partition();
+                    offset = metadata.offset();
+                }
+            }
+
+            LOGGER.info(
+                    "KafkaProducer - Message produced to Kafka - topic: {} - partition: {} - offset: {} - payload: {} - acks: {}",
+                    topic,
+                    partition,
+                    offset,
+                    payload,
+                    acks
+            );
+        } catch (InterruptedException | ExecutionException exc) {
+            topicsStats.addMessageNotProduced(topic, payload);
+
+            LOGGER.error(
+                    "KafkaProducer - Error publishing a message to Kafka: {} - topic: {} - payload: {} - acks: {}",
+                    exc.getMessage(),
+                    topic,
+                    payload,
+                    acks,
+                    exc
+            );
+
+            exc.printStackTrace();
+        }
+/*
+        template
+                .send(topic, payload)
+                .addCallback(new OnResultCallback(topicsStats, topic, acks, payload));
+*/
     }
 
     /**
@@ -158,17 +202,16 @@ public class KafkaProducer {
          */
         @Override
         public void onFailure(Throwable exc) {
-            topicsStats.addErrorProducingMessage(this.topic, this.payload);
+            topicsStats.addMessageNotProduced(this.topic, this.payload);
 
             LOGGER.error(
                     "KafkaProducer - Error publishing a message to Kafka: {} - topic: {} - payload: {} - acks: {}",
                     exc.getMessage(),
                     topic,
                     payload,
-                    acks
+                    acks,
+                    exc
             );
-
-            exc.printStackTrace();
         }
 
         /**
@@ -178,7 +221,7 @@ public class KafkaProducer {
          */
         @Override
         public void onSuccess(SendResult<String, String> result) {
-            topicsStats.addProducedMessage(this.topic, this.payload);
+            topicsStats.addMessageProducedSuccessfully(this.topic, this.payload);
 
             String topic = this.topic;
             int partition = -1;
@@ -200,7 +243,6 @@ public class KafkaProducer {
                     this.payload,
                     this.acks
             );
-
         }
     }
 }

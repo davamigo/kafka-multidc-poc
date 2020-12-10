@@ -32,7 +32,7 @@ public class TopicStatisticsTest {
     public void testGetProducedCountAfterProducing1MessageReturns1() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addProducedMessage("201");
+        stats.addMessageProducedSuccessfully("201");
 
         Assertions.assertEquals(1,  stats.getProducedCount());
     }
@@ -41,8 +41,8 @@ public class TopicStatisticsTest {
     public void testGetProducedCountAfterProducing2MessagesReturns2() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addProducedMessage("202");
-        stats.addProducedMessage("203");
+        stats.addMessageProducedSuccessfully("202");
+        stats.addMessageProducedSuccessfully("203");
 
         Assertions.assertEquals(2,  stats.getProducedCount());
     }
@@ -59,7 +59,7 @@ public class TopicStatisticsTest {
     public void testGetConsumedCountAfterProducing1MessageReturns1() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addConsumedMessage("301");
+        stats.addConsumedMessageSuccessfully("301");
 
         Assertions.assertEquals(1,  stats.getConsumedCount());
     }
@@ -68,8 +68,8 @@ public class TopicStatisticsTest {
     public void testGetConsumedCountAfterProducing2MessagesReturns2() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addConsumedMessage("302");
-        stats.addConsumedMessage("303");
+        stats.addConsumedMessageSuccessfully("302");
+        stats.addConsumedMessageSuccessfully("303");
 
         Assertions.assertEquals(2,  stats.getConsumedCount());
     }
@@ -79,36 +79,36 @@ public class TopicStatisticsTest {
 
         TopicStatistics stats = new TopicStatistics("_test_");
 
-        Assertions.assertEquals(0,  stats.getPendingMessagesCount());
+        Assertions.assertEquals(0,  stats.getMessagesProducedNotConsumedCount());
     }
 
     @Test
     public void testGetPendingMessagesCountAfterProducing1MessageReturns1() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addProducedMessage("401");
+        stats.addMessageProducedSuccessfully("401");
 
-        Assertions.assertEquals(1,  stats.getPendingMessagesCount());
+        Assertions.assertEquals(1,  stats.getMessagesProducedNotConsumedCount());
     }
 
     @Test
     public void testGetPendingMessagesCountAfterProducing2MessagesReturns2() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addProducedMessage("402");
-        stats.addProducedMessage("403");
+        stats.addMessageProducedSuccessfully("402");
+        stats.addMessageProducedSuccessfully("403");
 
-        Assertions.assertEquals(2,  stats.getPendingMessagesCount());
+        Assertions.assertEquals(2,  stats.getMessagesProducedNotConsumedCount());
     }
 
     @Test
     public void testGetPendingMessagesCountAfterProducingAndConsumingTheSameMessageReturns0() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addProducedMessage("404");
-        stats.addConsumedMessage("404");
+        stats.addMessageProducedSuccessfully("404");
+        stats.addConsumedMessageSuccessfully("404");
 
-        Assertions.assertEquals(0,  stats.getPendingMessagesCount());
+        Assertions.assertEquals(0,  stats.getMessagesProducedNotConsumedCount());
     }
 
     @Test
@@ -116,36 +116,36 @@ public class TopicStatisticsTest {
 
         TopicStatistics stats = new TopicStatistics("_test_");
 
-        Assertions.assertEquals(0,  stats.getOutOfSeqMessagesCount());
+        Assertions.assertEquals(0,  stats.getMessagesConsumedNotProducedCount());
     }
 
     @Test
     public void testGetOutOfSeqMessagesCountAfterConsuming1MessageReturns1() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addConsumedMessage("501");
+        stats.addConsumedMessageSuccessfully("501");
 
-        Assertions.assertEquals(1,  stats.getOutOfSeqMessagesCount());
+        Assertions.assertEquals(1,  stats.getMessagesConsumedNotProducedCount());
     }
 
     @Test
     public void testGetOutOfSeqMessagesCountAfterConsuming2MessagesReturns2() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addConsumedMessage("502");
-        stats.addConsumedMessage("503");
+        stats.addConsumedMessageSuccessfully("502");
+        stats.addConsumedMessageSuccessfully("503");
 
-        Assertions.assertEquals(2,  stats.getOutOfSeqMessagesCount());
+        Assertions.assertEquals(2,  stats.getMessagesConsumedNotProducedCount());
     }
 
     @Test
     public void testGetOutOfSeqMessagesCountAfterConsumingAndProducingTheSameMessageReturns0() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addConsumedMessage("504");
-        stats.addProducedMessage("504");
+        stats.addConsumedMessageSuccessfully("504");
+        stats.addMessageProducedSuccessfully("504");
 
-        Assertions.assertEquals(0,  stats.getOutOfSeqMessagesCount());
+        Assertions.assertEquals(0,  stats.getMessagesConsumedNotProducedCount());
     }
 
     @Test
@@ -153,25 +153,25 @@ public class TopicStatisticsTest {
 
         TopicStatistics stats = new TopicStatistics("_test_");
 
-        Assertions.assertEquals(0,  stats.getUnableToProduceMessagesCount());
+        Assertions.assertEquals(0,  stats.getMessagesNotProducedBecauseAnErrorCount());
     }
 
     @Test
     public void testGetUnableToProduceCountAfterAnErrorProducing1MessageReturns1() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addErrorProducingMessage("601");
+        stats.addMessageNotProduced("601");
 
-        Assertions.assertEquals(1,  stats.getUnableToProduceMessagesCount());
+        Assertions.assertEquals(1,  stats.getMessagesNotProducedBecauseAnErrorCount());
     }
 
     @Test
     public void testGetUnableToProduceCountAfter2ErrorsProducingMessagesReturns2() {
 
         TopicStatistics stats = new TopicStatistics("_test_");
-        stats.addErrorProducingMessage("602");
-        stats.addErrorProducingMessage("603");
+        stats.addMessageNotProduced("602");
+        stats.addMessageNotProduced("603");
 
-        Assertions.assertEquals(2,  stats.getUnableToProduceMessagesCount());
+        Assertions.assertEquals(2,  stats.getMessagesNotProducedBecauseAnErrorCount());
     }
 }
