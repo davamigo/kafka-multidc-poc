@@ -75,7 +75,7 @@ public class TopicStatistics {
      *
      * @param payload the payload of the message
      */
-    public void addConsumedMessageSuccessfully(String payload) {
+    public void addMessageConsumedSuccessfully(String payload) {
         store(Action.CONSUMED_SUCCESSFULLY, payload);
     }
 
@@ -181,28 +181,32 @@ public class TopicStatistics {
                 break;
 
             case PRODUCED_SUCCESSFULLY:
-                producedCount++;
                 messagesSentToProducer.remove(payload);
                 if (messagesConsumedNotProduced.contains(payload)) {
                     messagesConsumedNotProduced.remove(payload);
-                } else if (!messagesProducedNotConsumed.contains(payload)){
+                    producedCount++;
+                } else if (!messagesProducedNotConsumed.contains(payload)) {
                     messagesProducedNotConsumed.add(payload);
+                    producedCount++;
                 }
                 break;
 
             case CONSUMED_SUCCESSFULLY:
-                consumedCount++;
                 messagesSentToProducer.remove(payload);
                 if (messagesProducedNotConsumed.contains(payload)) {
                     messagesProducedNotConsumed.remove(payload);
-                } else if (!messagesConsumedNotProduced.contains(payload)){
+                    consumedCount++;
+                } else if (!messagesConsumedNotProduced.contains(payload)) {
                     messagesConsumedNotProduced.add(payload);
+                    consumedCount++;
                 }
                 break;
 
             case NOT_PRODUCED:
                 messagesSentToProducer.remove(payload);
-                messagesNotProducedBecauseAnError.add(payload);
+                if (!messagesNotProducedBecauseAnError.contains(payload)) {
+                    messagesNotProducedBecauseAnError.add(payload);
+                }
                 break;
         }
     }

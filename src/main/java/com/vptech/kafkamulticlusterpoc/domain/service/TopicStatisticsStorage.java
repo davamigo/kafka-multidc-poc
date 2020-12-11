@@ -88,9 +88,9 @@ public class TopicStatisticsStorage {
      * @param payload   the payload of the message
      * @throws IllegalArgumentException when the topic doesn't exist in the storage
      */
-    public void addConsumedMessageSuccessfully(final String topicName, final String payload) {
+    public void addMessageConsumedSuccessfully(final String topicName, final String payload) {
         checkTopicExist(topicName);
-        statistics.get(topicName).addConsumedMessageSuccessfully(payload);
+        statistics.get(topicName).addMessageConsumedSuccessfully(payload);
     }
 
     /**

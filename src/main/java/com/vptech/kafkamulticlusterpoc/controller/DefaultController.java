@@ -55,7 +55,7 @@ public class DefaultController {
      *
      * Path: /
      *
-     * @return the HTML of the home page
+     * @return the model and view object to render the result
      */
     @GetMapping("/")
     public ModelAndView defaultAction() {
@@ -77,7 +77,7 @@ public class DefaultController {
      *
      * Path: /topics
      *
-     * @return the HTML of the home page
+     * @return the model and view object to render the result
      */
     @GetMapping("/topics")
     public ModelAndView topicsAction() {

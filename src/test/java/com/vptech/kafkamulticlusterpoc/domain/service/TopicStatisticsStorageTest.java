@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TopicStatisticsStorageTest {
 
     @Test
-    public void testGetTopicStatisticsOfAnExistingTopicReturnsTheTopicSttistics() {
+    public void testGetTopicStatisticsOfAnExistingTopicReturnsTheTopicStatistics() {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
         storage.addTopic("_topic_101_");
@@ -32,6 +32,8 @@ public class TopicStatisticsStorageTest {
 
         Assertions.assertNull(statistics);
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Test
     public void testGetAllTopicStatisticsOfAnEmptyObjetReturnsAnEmptyList() {
@@ -70,66 +72,134 @@ public class TopicStatisticsStorageTest {
         Assertions.assertEquals(2, storage.getAllTopicStatistics().size());
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @Test
-    public void testAddProducedMessageOfAnExistingTopicAddsTheDataToTheTopicStatistics() {
+    public void testGetAllTopicsOfAnEmptyObjetReturnsAnEmptyList() {
+
+        TopicStatisticsStorage storage = new TopicStatisticsStorage();
+
+        Assertions.assertTrue(storage.getAllTopics().isEmpty());
+    }
+
+    @Test
+    public void testGetAllTopicsAfterAdding1TopicReturnsAListOf1Topic() {
+
+        TopicStatisticsStorage storage = new TopicStatisticsStorage();
+        storage.addTopic("_topic_211_");
+
+        Assertions.assertEquals(1, storage.getAllTopics().size());
+    }
+
+    @Test
+    public void testGetAllTopicsAfterAddingTwoTimesTheSameTopicReturnsAListOf1Topic() {
+
+        TopicStatisticsStorage storage = new TopicStatisticsStorage();
+        storage.addTopic("_topic_212_");
+        storage.addTopic("_topic_212_");
+
+        Assertions.assertEquals(1, storage.getAllTopics().size());
+    }
+
+    @Test
+    public void testGetAllTopicsAfterAdding2TopicsReturnsAListOf2Topics() {
+
+        TopicStatisticsStorage storage = new TopicStatisticsStorage();
+        storage.addTopic("_topic_213_");
+        storage.addTopic("_topic_214_");
+
+        Assertions.assertEquals(2, storage.getAllTopics().size());
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void testAddMessageSentToBeProducedOfAnExistingTopicAddsTheDataToTheTopicStatistics() {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
         storage.addTopic("_topic_301_");
-        storage.addMessageProducedSuccessfully("_topic_301_", "_some_payload_");
+        storage.addMessageSentToBeProduced("_topic_301_", "_some_payload_");
 
-        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_301_").getProducedCount());
+        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_301_").getMessagesSentToProducerCount());
     }
 
     @Test
-    public void testAddProducedMessageOfANonExistingTopicCausesAnException() {
+    public void testAddMessageSentToBeProducedOfANonExistingTopicCausesAnException() {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> storage.addMessageProducedSuccessfully("_topic_302_", "_some_payload_")
+                () -> storage.addMessageSentToBeProduced("_topic_302_", "_some_payload_")
         );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @Test
-    public void testAddConsumedMessageOfAnExistingTopicAddsTheDataToTheTopicStatistics() {
+    public void testAddMessageProducedSuccessfullyOfAnExistingTopicAddsTheDataToTheTopicStatistics() {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
         storage.addTopic("_topic_401_");
-        storage.addConsumedMessageSuccessfully("_topic_401_", "_some_payload_");
+        storage.addMessageProducedSuccessfully("_topic_401_", "_some_payload_");
 
-        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_401_").getConsumedCount());
+        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_401_").getProducedCount());
     }
 
     @Test
-    public void testAddConsumedMessageOfANonExistingTopicCausesAnException() {
+    public void testAddMessageProducedSuccessfullyOfANonExistingTopicCausesAnException() {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> storage.addConsumedMessageSuccessfully("_topic_402_", "_some_payload_")
+                () -> storage.addMessageProducedSuccessfully("_topic_402_", "_some_payload_")
         );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @Test
-    public void testAddErrorProducingMessageOfAnExistingTopicAddsTheDataToTheTopicStatistics() {
+    public void testAddMessageConsumedSuccessfullyOfAnExistingTopicAddsTheDataToTheTopicStatistics() {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
         storage.addTopic("_topic_501_");
-        storage.addMessageNotProduced("_topic_501_", "_some_payload_");
+        storage.addMessageConsumedSuccessfully("_topic_501_", "_some_payload_");
 
-        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_501_").getMessagesNotProducedBecauseAnErrorCount());
+        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_501_").getConsumedCount());
     }
 
     @Test
-    public void testAddErrorProducingMessageOfANonExistingTopicCausesAnException() {
+    public void testAddMessageConsumedSuccessfullyOfANonExistingTopicCausesAnException() {
 
         TopicStatisticsStorage storage = new TopicStatisticsStorage();
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> storage.addMessageNotProduced("_topic_502_", "_some_payload_")
+                () -> storage.addMessageConsumedSuccessfully("_topic_502_", "_some_payload_")
+        );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void testAddMessageNotProducedOfAnExistingTopicAddsTheDataToTheTopicStatistics() {
+
+        TopicStatisticsStorage storage = new TopicStatisticsStorage();
+        storage.addTopic("_topic_601_");
+        storage.addMessageNotProduced("_topic_601_", "_some_payload_");
+
+        Assertions.assertEquals(1, storage.getTopicStatistics("_topic_601_").getMessagesNotProducedBecauseAnErrorCount());
+    }
+
+    @Test
+    public void testAddMessageNotProducedOfANonExistingTopicCausesAnException() {
+
+        TopicStatisticsStorage storage = new TopicStatisticsStorage();
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> storage.addMessageNotProduced("_topic_602_", "_some_payload_")
         );
     }
 }
