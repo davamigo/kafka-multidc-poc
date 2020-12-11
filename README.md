@@ -122,6 +122,8 @@ This step could take some minutes.
 You will see in almost real time how the producer sends messages to the topics
 and how the consumers read the messages.
 
+![scr1.png](docs/images/scr1.png "Screenshot")
+
 5.- Stop all the brokers in `dc2`:
 
 ```bash
@@ -133,6 +135,8 @@ since there are enough in-sync replicas to continue running.
 
 However `topic.acks.0` could have lost a message since no the producer is
 not waiting for any confirmation.
+
+![scr2.png](docs/images/scr2.png "Screenshot")
 
 You should enable again the brokers on `dc2` before continue and wait
 until all the messages are replicated to those brokers.
@@ -163,6 +167,8 @@ Topic: topic.acks.all	PartitionCount: 7	ReplicationFactor: 4	Configs: min.insync
 	Topic: topic.acks.all	Partition: 5	Leader: 4	Replicas: 3,4,5,1	Isr: 4
 	Topic: topic.acks.all	Partition: 6	Leader: 4	Replicas: 4,5,1,2	Isr: 2,4
 ```
+
+![scr3.png](docs/images/scr3.png "Screenshot")
 
 ---
 
