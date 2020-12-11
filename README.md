@@ -5,7 +5,7 @@ in a multi-broker, multi-DC environment with replication > 1 and in-sync replica
 
 ## Proof of Concept
 
-The PoC is a Spring Boot Java app running in [docker]
+The PoC is a Spring Boot Java app running in [docker](https://www.docker.com/)
 along with a simulated multi-DC Kafka cluster.
 
 The Java app starts 3 producers with different configurations of acks: all,1, 0.
@@ -29,7 +29,8 @@ of what is happening in each topic:
 ## PoC configuration
 
 The `docker` folder contains a configuration to run a Kafka cluster with
-5 Kafka brokers and 3 Zookeeper servers, all based in the [`blacktop/kafka:2.6`]
+5 Kafka brokers and 3 Zookeeper servers, all based in the
+[`blacktop/kafka:2.6`](https://hub.docker.com/r/blacktop/kafka)
 docker image.
 
 The testing Kafka cluster is composed of:
@@ -170,7 +171,13 @@ Topic: topic.acks.all	PartitionCount: 7	ReplicationFactor: 4	Configs: min.insync
 
 ![scr3.png](docs/images/scr3.png "Screenshot")
 
----
+# Links
 
-[docker]: https://www.docker.com/
-[`blacktop/kafka:2.6`]: https://hub.docker.com/r/blacktop/kafka
+* [blacktop/kafka at Dockerhub](https://hub.docker.com/r/blacktop/kafka).
+* [blacktop/kafka at Github](https://github.com/blacktop/docker-kafka-alpine).
+* [Apache Kafka documentation](https://kafka.apache.org/documentation/).
+* [ZooKeeper documentation](https://zookeeper.apache.org/doc/r3.6.2/).
+* [Dockerfile reference](https://docs.docker.com/engine/reference/builder/).
+* [Docker compose file reference](https://docs.docker.com/compose/compose-file/).
+* [Kafka and Zookeeper MultiNode Cluster Setup](https://medium.com/@kiranps11/kafka-and-zookeeper-multinode-cluster-setup-3511aef4a505).
+* [The Foundations of Multi-DC Kafka](https://www.confluent.io/kafka-summit-lon19/foundations-of-multi-dc-kafka/), video.
