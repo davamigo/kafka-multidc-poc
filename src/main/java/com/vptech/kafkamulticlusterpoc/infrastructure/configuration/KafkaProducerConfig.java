@@ -84,14 +84,17 @@ public class KafkaProducerConfig extends KafkaConfiguration {
      * @return the default configurations for all the Kafka producers
      */
     private Map<String, Object> producerConfigs(String acksConfig) {
-        Map<String, Object> props = new HashMap<>();
+        final boolean enableIdempotence = acksConfig.equals("all");
+
+        final Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, getBootstrapServersConfig());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
         props.put(ProducerConfig.ACKS_CONFIG, acksConfig);
         props.put(ProducerConfig.RETRIES_CONFIG, "3");
-        props.put(ProducerConfig.LINGER_MS_CONFIG, "2");
+        props.put(ProducerConfig.LINGER_MS_CONFIG, "0");
+        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence);
 
         return props;
     }
